@@ -18,18 +18,20 @@ class BonjourConnection: NSObject {
         self.service = service
         super.init()
         service.delegate = self
-        if service.addresses?.count ?? 0 > 0 {
-            print("calling connect")
-            self.connect()
-        } else {
-            print("calling resolve")
-            service.resolve(withTimeout: 30.0)
-        }
     }
     
-    deinit {
-        print("BonjourConnection deinit")
-        self.disconnect()
+    func connect() {
+        if service.addresses?.count ?? 0 == 0 {
+            service.resolve(withTimeout: 30.0)
+            return
+        }
+
+        let socket = GCDAsyncSocket(delegate: self, delegateQueue: .main)
+        service.addresses?.forEach({ address in
+            if self.socket == nil, let _ = try? socket.connect(toAddress: address) {
+                self.socket = socket
+            }
+        })
     }
     
     func disconnect() {
@@ -49,17 +51,6 @@ extension BonjourConnection : NetServiceDelegate {
     func netServiceDidResolveAddress(_ sender: NetService) {
         print("netServiceDidResolveAddress", sender.addresses!)
         connect()
-    }
-    
-    func connect() {
-        let socket = GCDAsyncSocket(delegate: self, delegateQueue: .main)
-        service.addresses?.forEach({ address in
-            if self.socket == nil, let _ = try? socket.connect(toAddress: address) {
-                self.socket = socket
-                print("socket.connect succeeded!", socket.isConnected)
-            }
-        })
-        print("isConnected", self.isConnected)
     }
     
     func netService(_ sender: NetService, didNotPublish errorDict: [String : NSNumber]) {
