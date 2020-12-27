@@ -19,7 +19,7 @@ class BonjourBrowser: NSObject, ObservableObject {
         self.type = type
     }
 
-    func browseServices() {
+    func start() {
         services.removeAll()
         serviceBrowser.delegate = self
         print("step 1")

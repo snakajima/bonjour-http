@@ -13,12 +13,16 @@ struct ContentView: View {
         NavigationView {
             List {
                 ForEach(browser.services) { service in
-                    Text(service.name)
+                    NavigationLink(
+                        destination: Text(service.name),
+                        label: {
+                            Text(service.name)
+                        })
                 }
             }
         }
         .onAppear() {
-            browser.browseServices()
+            browser.start()
         }
     }
 }
