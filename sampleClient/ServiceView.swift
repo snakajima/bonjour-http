@@ -18,6 +18,11 @@ struct ServiceView: View {
     var body: some View {
         VStack {
             Text(service.name)
+            Button(action: {
+                connection.send(string: "Hello World")
+            }, label: {
+                Text("Hellow")
+            })
         }
         .onAppear() {
             self.connection.connect()
