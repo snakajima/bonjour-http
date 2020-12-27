@@ -8,9 +8,13 @@
 import SwiftUI
 
 struct ContentView: View {
+    let browser = BonjourBrowser("_sample._ctp")
     var body: some View {
         Text("Hello, world!")
             .padding()
+            .onAppear() {
+                browser.browseServices()
+            }
     }
 }
 
