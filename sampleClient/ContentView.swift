@@ -14,7 +14,7 @@ struct ContentView: View {
             List {
                 ForEach(browser.services) { service in
                     NavigationLink(
-                        destination: Text(service.name),
+                        destination: ServiceView(service: service),
                         label: {
                             Text(service.name)
                         })
