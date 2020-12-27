@@ -12,7 +12,7 @@ extension NetService : Identifiable {
 
 class BonjourBrowser: NSObject, ObservableObject {
     let type:String
-    var serviceBrowser = NetServiceBrowser()
+    private var serviceBrowser = NetServiceBrowser()
     @Published var services = [NetService]()
     
     init(_ type:String) {
@@ -22,11 +22,8 @@ class BonjourBrowser: NSObject, ObservableObject {
     func start() {
         services.removeAll()
         serviceBrowser.delegate = self
-        print("step 1")
         serviceBrowser.schedule(in: .main, forMode: .common)
-        print("step 2")
         serviceBrowser.searchForServices(ofType: type, inDomain: "local.")
-        print("step 3")
     }
 }
 
