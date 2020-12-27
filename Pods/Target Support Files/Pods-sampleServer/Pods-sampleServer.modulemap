@@ -1,0 +1,6 @@
+framework module Pods_sampleServer {
+  umbrella header "Pods-sampleServer-umbrella.h"
+
+  export *
+  module * { export * }
+}
