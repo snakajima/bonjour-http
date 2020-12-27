@@ -8,13 +8,18 @@
 import SwiftUI
 
 struct ContentView: View {
-    let browser = BonjourBrowser("_sample._ctp")
+    @ObservedObject var browser = BonjourBrowser("_samplehttp._tcp")
     var body: some View {
-        Text("Hello, world!")
-            .padding()
-            .onAppear() {
-                browser.browseServices()
+        NavigationView {
+            List {
+                ForEach(browser.services) { service in
+                    Text(service.name)
+                }
             }
+        }
+        .onAppear() {
+            browser.browseServices()
+        }
     }
 }
 
