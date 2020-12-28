@@ -19,7 +19,7 @@ struct BonjourRequest {
         self.path = path
         self.method = method
         self.proto = "HTTP/1.1"
-        self.headers = [:]
+        self.headers = ["User-Agent":"bonjour-http", "Accept":"*/*"]
     }
 
     mutating func setBody(string: String, type: String="text/html") {

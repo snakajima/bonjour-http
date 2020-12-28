@@ -12,6 +12,7 @@ class BonjourConnection: NSObject, ObservableObject {
     private let service:NetService
     private var socket:GCDAsyncSocket? = nil
     @Published var isConnected:Bool = false
+    private var buffer:Data? = nil
     
     init(_ service:NetService) {
         self.service = service
@@ -74,8 +75,17 @@ extension BonjourConnection : GCDAsyncSocketDelegate {
     
     func socket(_ sock: GCDAsyncSocket, didRead data: Data, withTag tag: Int) {
         sock.readData(withTimeout: -1, tag: 3)
-        let res = BonjourResponce(data: data)
-        print("res:", res ?? "N/A")
+        if let _ = self.buffer {
+            buffer!.append(data)
+        } else {
+            buffer = data
+        }
+        guard let res = BonjourResponce(data: buffer!) else {
+            print("buffering")
+            return
+        }
+        buffer = nil
+        print("res:", res)
     }
     
     func socket(_ sock: GCDAsyncSocket, didWriteDataWithTag tag: Int) {
