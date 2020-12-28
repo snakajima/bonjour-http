@@ -69,12 +69,11 @@ extension BonjourService : GCDAsyncSocketDelegate {
     }
     
     func socket(_ sock: GCDAsyncSocket, didRead data: Data, withTag tag: Int) {
-        let string = String(decoding:data, as:UTF8.self)
-        print("socket:didRead:withTag", data, tag, string, sock)
         sock.readData(withTimeout: -1, tag: 3)
         
         // WARNING: Following code assumes that we receive the HTTP request in one packet.
-        guard let http = HTTPHeader(string: string) else {
+        guard let http = HTTPParser(data: data) else {
+            print("### HTTPParser failed")
             return
         }
         print("http", http)

@@ -7,13 +7,30 @@
 
 import Foundation
 
-struct HTTPHeader {
+struct HTTPParser {
     let method:String
     let path:String
     let proto:String
     let headers:[String:String]
     
-    init?(string:String) {
+    init?(data:Data) {
+        let rows = data.split(separator: 0x0a)
+        var headerLength = 0
+        var counter = 0
+        rows.forEach { (row) in
+            if row.count == 1 && String(decoding:row, as:UTF8.self) == "\r" {
+                headerLength = counter
+            } else {
+                counter += row.count + 1
+            }
+        }
+        if headerLength == 0 {
+            print("### no header")
+            return nil
+        }
+        let headerData = data.subdata(in: 0..<headerLength)
+        let string = String(decoding:headerData, as:UTF8.self)
+
         var lines = string.components(separatedBy: "\n").map { $0.trimmingCharacters(in: CharacterSet(arrayLiteral: "\r"))}
 
         let parts = lines.removeFirst().components(separatedBy: " ")
@@ -23,11 +40,6 @@ struct HTTPHeader {
         }
         (method, path, proto) = (parts[0], parts[1], parts[2])
         
-        let lastLine = lines.removeLast()
-        guard lastLine == "" else {
-            print("invalid last line")
-            return nil
-        }
         var headers = [String:String]()
         lines.forEach { line in
             let parts = line.split(separator: ":", maxSplits: 1).map(String.init)
@@ -40,7 +52,7 @@ struct HTTPHeader {
     }
 }
 
-extension HTTPHeader : CustomStringConvertible {
+extension HTTPParser : CustomStringConvertible {
     var description: String {
         "Method:\(method), Path:\(path), Protocol:\(proto)"
     }
