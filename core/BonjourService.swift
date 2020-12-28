@@ -74,21 +74,11 @@ extension BonjourService : GCDAsyncSocketDelegate {
         sock.readData(withTimeout: -1, tag: 3)
         
         // WARNING: Following code assumes that we receive the HTTP request in one packet.
-        var lines = string.components(separatedBy: "\n").map { $0.trimmingCharacters(in: CharacterSet(arrayLiteral: "\r"))}
-        let parts = lines.removeFirst().components(separatedBy: " ")
-        lines.removeLast()
-        var headers = [String:String]()
-        lines.forEach { line in
-            let parts = line.split(separator: ":", maxSplits: 1).map(String.init)
-                            .map { $0.trimmingCharacters(in: CharacterSet.whitespaces )}
-            if parts.count == 2 {
-                headers[parts.first!] = parts.last!
-            }
+        guard let http = HTTPHeader(string: string) else {
+            return
         }
-        
-        print("firstline", parts)
-        print(headers)
-        
+        print("http", http)
+
         send(to: sock, string: "How are you?")
     }
     
