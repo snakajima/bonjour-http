@@ -16,7 +16,7 @@ struct BonjourReponce {
     init(request:BonjourRequest) {
         self.request = request
     }
-
+    
     mutating func setBody(string: String, type: String="text/html") {
         body = Data(string.utf8)
         headers["Content-Length"] = String(body!.count)

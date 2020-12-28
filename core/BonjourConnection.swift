@@ -61,7 +61,7 @@ extension BonjourConnection : NetServiceDelegate {
 
 extension BonjourConnection : GCDAsyncSocketDelegate {
     func socket(_ sock: GCDAsyncSocket, didConnectToHost host: String, port: UInt16) {
-        print("socket:didConnectToHost", self.isConnected, sock.connectedAddress, sock.localAddress, sock.localPort)
+        print("socket:didConnectToHost")
         isConnected = true
         sock.readData(withTimeout: -1, tag: 3)
     }

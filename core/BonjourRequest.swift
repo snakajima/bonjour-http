@@ -34,8 +34,12 @@ struct BonjourRequest {
         }.joined(separator: "\r\n")
         return Data("\(method) \(path) \(proto)\r\n\(headersSection)\r\n\r\n".utf8)
     }
-
-    init?(data:Data) {
+    
+    enum ParserError : Error {
+        case incompleteHeader
+    }
+    
+    static func extractHeader(data:Data) throws -> (Data, Data?) {
         let rows = data.split(separator: 0x0a)
         var headerLength = 0
         var counter = 0
@@ -47,33 +51,46 @@ struct BonjourRequest {
             }
         }
         if headerLength == 0 {
-            print("### no header")
-            return nil
+            throw ParserError.incompleteHeader
         }
         let headerData = data.subdata(in: 0..<headerLength)
         let bodyIndex = headerLength + 2
+        let body:Data?
         if data.count == bodyIndex {
             body = nil
         } else {
             body = data.subdata(in: bodyIndex..<data.count)
         }
-        
-        let string = String(decoding:headerData, as:UTF8.self)
-        var lines = string.components(separatedBy: "\n").map { $0.trimmingCharacters(in: CharacterSet(arrayLiteral: "\r"))}
+        return (headerData, body)
+    }
+    
+    //static func extractHeaders(headerData:Data) -> (String, [String:String])
 
-        let parts = lines.removeFirst().components(separatedBy: " ")
-        guard parts.count == 3 else {
-            print("invalid first line", parts)
-            return nil
-        }
-        (method, path, proto) = (parts[0], parts[1], parts[2])
-        
-        lines.forEach { line in
-            let parts = line.split(separator: ":", maxSplits: 1).map(String.init)
-                            .map { $0.trimmingCharacters(in: CharacterSet.whitespaces )}
-            if parts.count == 2 {
-                headers[parts.first!] = parts.last!
+    init?(data:Data) {
+        do {
+            let (headerData, body) = try Self.extractHeader(data: data)
+            self.body = body
+            
+            let string = String(decoding:headerData, as:UTF8.self)
+            var lines = string.components(separatedBy: "\n").map { $0.trimmingCharacters(in: CharacterSet(arrayLiteral: "\r"))}
+
+            let parts = lines.removeFirst().components(separatedBy: " ")
+            guard parts.count == 3 else {
+                print("invalid first line", parts)
+                return nil
             }
+            (method, path, proto) = (parts[0], parts[1], parts[2])
+            
+            lines.forEach { line in
+                let parts = line.split(separator: ":", maxSplits: 1).map(String.init)
+                                .map { $0.trimmingCharacters(in: CharacterSet.whitespaces )}
+                if parts.count == 2 {
+                    headers[parts.first!] = parts.last!
+                }
+            }
+        } catch {
+            print("### Error", error)
+            return nil
         }
     }
 }
