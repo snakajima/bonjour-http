@@ -29,7 +29,7 @@ struct BonjourReponce {
             "\($0):\($1)"
         }.joined(separator: "\r\n")
         return Data(
-            ("\(request.method) \(status)\r\n"
+            ("\(request.proto) \(status)\r\n"
             + "\(headersSection)\r\n\r\n").utf8)
     }
 }
