@@ -11,6 +11,7 @@ import CocoaAsyncSocket
 
 @objc class BonjourService : NSObject, ObservableObject {
     let type:String
+    let port:UInt16
     private var service:NetService? {
         didSet {
             isRunning = service != nil
@@ -20,14 +21,15 @@ import CocoaAsyncSocket
     @Published public var clients = [GCDAsyncSocket]()
     @Published public var isRunning = false
 
-    init(type:String) {
+    init(type: String, port: UInt16 = 0) {
         self.type = type
+        self.port = port
     }
     
     func start() {
         hostSocket = GCDAsyncSocket(delegate: self, delegateQueue: .main)
         do {
-            try hostSocket.accept(onPort: 0)
+            try hostSocket.accept(onPort: port)
             print("socket created", hostSocket.localPort)
             let service = NetService(domain: "local.", type: type, name: "", port: Int32(hostSocket.localPort))
             service.delegate = self
@@ -70,6 +72,22 @@ extension BonjourService : GCDAsyncSocketDelegate {
         let string = String(decoding:data, as:UTF8.self)
         print("socket:didRead:withTag", data, tag, string, sock)
         sock.readData(withTimeout: -1, tag: 3)
+        
+        // WARNING: Following code assumes that we receive the HTTP request in one packet.
+        var lines = string.components(separatedBy: "\n").map { $0.trimmingCharacters(in: CharacterSet(arrayLiteral: "\r"))}
+        let parts = lines.removeFirst().components(separatedBy: " ")
+        lines.removeLast()
+        var headers = [String:String]()
+        lines.forEach { line in
+            let parts = line.split(separator: ":", maxSplits: 1).map(String.init)
+                            .map { $0.trimmingCharacters(in: CharacterSet.whitespaces )}
+            if parts.count == 2 {
+                headers[parts.first!] = parts.last!
+            }
+        }
+        
+        print("firstline", parts)
+        print(headers)
         
         send(to: sock, string: "How are you?")
     }

@@ -12,7 +12,7 @@ extension GCDAsyncSocket : Identifiable {
 }
 
 struct ContentView: View {
-    @ObservedObject var service = BonjourService(type:"_samplehttp._tcp")
+    @ObservedObject var service = BonjourService(type:"_samplehttp._tcp", port:8001)
     var body: some View {
         VStack {
             Text("Hello, world!")
