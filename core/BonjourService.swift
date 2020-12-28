@@ -10,7 +10,7 @@ import Foundation
 import CocoaAsyncSocket
 
 protocol BonjourServiceDelegate: NSObjectProtocol {
-    func on(reqeust: HTTPRequest, service: BonjourService, socket: GCDAsyncSocket)
+    func on(reqeust: BonjourRequest, service: BonjourService, socket: GCDAsyncSocket)
 }
 
 @objc class BonjourService : NSObject, ObservableObject {
@@ -63,8 +63,11 @@ protocol BonjourServiceDelegate: NSObjectProtocol {
         socket.write(data, withTimeout: -1.0, tag: 3)
     }
     
-    func send(request: HTTPRequest, to socket: GCDAsyncSocket) {
+    func send(request: BonjourRequest, to socket: GCDAsyncSocket) {
         socket.write(request.headerData, withTimeout: -1.0, tag: 3)
+        if let body = request.body {
+            socket.write(body, withTimeout: -1.0, tag: 3)
+        }
     }
 }
 
@@ -82,7 +85,7 @@ extension BonjourService : GCDAsyncSocketDelegate {
         sock.readData(withTimeout: -1, tag: 3)
         
         // WARNING: Following code assumes that we receive the HTTP request in one packet.
-        guard let http = HTTPRequest(data: data) else {
+        guard let http = BonjourRequest(data: data) else {
             print("### HTTPParser failed")
             return
         }

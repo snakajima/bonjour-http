@@ -8,7 +8,7 @@
 import Foundation
 import CocoaAsyncSocket
 
-struct HTTPRequest {
+struct BonjourRequest {
     let method:String
     let path:String
     let proto:String
@@ -78,7 +78,7 @@ struct HTTPRequest {
     }
 }
 
-extension HTTPRequest : CustomStringConvertible {
+extension BonjourRequest : CustomStringConvertible {
     var description: String {
         guard let body = body else {
             return "Method:\(method), Path:\(path), Protocol:\(proto)"
