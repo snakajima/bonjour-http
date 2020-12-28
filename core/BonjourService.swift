@@ -62,6 +62,10 @@ protocol BonjourServiceDelegate: NSObjectProtocol {
         let data = Data(string.utf8)
         socket.write(data, withTimeout: -1.0, tag: 3)
     }
+    
+    func send(request: HTTPRequest, to socket: GCDAsyncSocket) {
+        socket.write(request.headerData, withTimeout: -1.0, tag: 3)
+    }
 }
 
 extension BonjourService : GCDAsyncSocketDelegate {

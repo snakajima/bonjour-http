@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import CocoaAsyncSocket
 
 struct HTTPRequest {
     let method:String
@@ -13,6 +14,26 @@ struct HTTPRequest {
     let proto:String
     var headers = [String:String]()
     var body:Data?
+    
+    init(path: String, method: String = "GET") {
+        self.path = path
+        self.method = method
+        self.proto = "HTTP/1.1"
+    }
+    
+    mutating func setBody(string: String, type: String="text/html") {
+        body = Data(string.utf8)
+        headers["Content-Length"] = String(body!.count)
+        headers["Content-Type"] = type
+        headers["charset"] = "UTF-8"
+    }
+    
+    var headerData:Data {
+        let headersSection = headers.map {
+            "\($0):\($1)"
+        }.joined(separator: "\r\n")
+        return Data("\(method) \(path) \(proto)\r\n\(headersSection)\r\n\r\n".utf8)
+    }
     
     init?(data:Data) {
         let rows = data.split(separator: 0x0a)
