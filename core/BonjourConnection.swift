@@ -44,6 +44,9 @@ class BonjourConnection: NSObject, ObservableObject {
         socket?.write(data, withTimeout: -1.0, tag: 3)
     }
 
+    func send(req: BonjourRequest) {
+        //socket?.write()
+    }
 }
 
 extension BonjourConnection : NetServiceDelegate {

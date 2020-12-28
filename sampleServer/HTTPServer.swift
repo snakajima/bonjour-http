@@ -13,7 +13,8 @@ class HTTPServer : NSObject {
 
 extension HTTPServer : BonjourServiceDelegate {
     func on(reqeust: BonjourRequest, service: BonjourService, socket: GCDAsyncSocket) {
-        let response = BonjourRequest(path: "/")
-        service.send(to: socket, string: "Merry X'mas")
+        var res = BonjourReponce(request: reqeust)
+        res.setBody(string: "<html><body>Hello World</body></html>")
+        service.send(responce: res, to: socket)
     }
 }

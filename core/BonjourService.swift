@@ -63,9 +63,9 @@ protocol BonjourServiceDelegate: NSObjectProtocol {
         socket.write(data, withTimeout: -1.0, tag: 3)
     }
     
-    func send(request: BonjourRequest, to socket: GCDAsyncSocket) {
-        socket.write(request.headerData, withTimeout: -1.0, tag: 3)
-        if let body = request.body {
+    func send(responce: BonjourReponce, to socket: GCDAsyncSocket) {
+        socket.write(responce.headerData, withTimeout: -1.0, tag: 3)
+        if let body = responce.body {
             socket.write(body, withTimeout: -1.0, tag: 3)
         }
     }
