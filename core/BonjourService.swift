@@ -10,7 +10,7 @@ import Foundation
 import CocoaAsyncSocket
 
 protocol BonjourServiceDelegate: NSObjectProtocol {
-    func on(reqeust: HTTPRequest)
+    func on(reqeust: HTTPRequest, service:BonjourService)
 }
 
 @objc class BonjourService : NSObject, ObservableObject {
@@ -84,7 +84,7 @@ extension BonjourService : GCDAsyncSocketDelegate {
         }
         print("http", http)
         if let delegate = self.delegate {
-            delegate.on(reqeust: http)
+            delegate.on(reqeust: http, service: self)
         }
     }
     
