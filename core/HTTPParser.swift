@@ -12,6 +12,7 @@ struct HTTPParser {
     let path:String
     let proto:String
     let headers:[String:String]
+    let body:Data?
     
     init?(data:Data) {
         let rows = data.split(separator: 0x0a)
@@ -29,8 +30,14 @@ struct HTTPParser {
             return nil
         }
         let headerData = data.subdata(in: 0..<headerLength)
+        let bodyIndex = headerLength + 2
+        if data.count == bodyIndex {
+            body = nil
+        } else {
+            body = data.subdata(in: bodyIndex..<data.count)
+        }
+        
         let string = String(decoding:headerData, as:UTF8.self)
-
         var lines = string.components(separatedBy: "\n").map { $0.trimmingCharacters(in: CharacterSet(arrayLiteral: "\r"))}
 
         let parts = lines.removeFirst().components(separatedBy: " ")
@@ -54,6 +61,9 @@ struct HTTPParser {
 
 extension HTTPParser : CustomStringConvertible {
     var description: String {
-        "Method:\(method), Path:\(path), Protocol:\(proto)"
+        guard let body = body else {
+            return "Method:\(method), Path:\(path), Protocol:\(proto)"
+        }
+        return "Method:\(method), Path:\(path), Protocol:\(proto), Body:\(body.count)"
     }
 }
