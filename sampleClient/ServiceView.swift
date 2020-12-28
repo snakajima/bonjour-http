@@ -21,7 +21,7 @@ struct ServiceView: View {
             Button(action: {
                 connection.send(string: "Hello World")
             }, label: {
-                Text("Hellow")
+                Text("Hello")
             })
         }
         .onAppear() {

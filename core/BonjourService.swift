@@ -17,7 +17,7 @@ import CocoaAsyncSocket
         }
     }
     private var hostSocket = GCDAsyncSocket()
-    private var clientSocket:GCDAsyncSocket?
+    private var clients = [GCDAsyncSocket]()
     @Published public var isRunning = false
 
     init(type:String) {
@@ -46,17 +46,16 @@ import CocoaAsyncSocket
         }
     }
     
-    func send(string: String) {
+    func send(to socket: GCDAsyncSocket, string: String) {
         let data = Data(string.utf8)
-        print(hostSocket, clientSocket!)
-        clientSocket?.write(data, withTimeout: -1.0, tag: 3)
+        socket.write(data, withTimeout: -1.0, tag: 3)
     }
 }
 
 extension BonjourService : GCDAsyncSocketDelegate {
     func socket(_ sock: GCDAsyncSocket, didAcceptNewSocket newSocket: GCDAsyncSocket) {
         print("socket:didAcceptNewSocket", newSocket)
-        self.clientSocket = newSocket
+        self.clients.append(newSocket)
         newSocket.delegate = self
         newSocket.delegateQueue = .main
         newSocket.readData(withTimeout: -1, tag: 3)
@@ -68,7 +67,7 @@ extension BonjourService : GCDAsyncSocketDelegate {
         print("socket:didRead:withTag", data, tag, string, sock)
         sock.readData(withTimeout: -1, tag: 3)
         
-        send(string: "How are you?")
+        send(to: sock, string: "How are you?")
     }
     
     func socket(_ sock: GCDAsyncSocket, didWriteDataWithTag tag: Int) {
