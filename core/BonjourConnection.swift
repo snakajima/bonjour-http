@@ -8,10 +8,10 @@
 import Foundation
 import CocoaAsyncSocket
 
-class BonjourConnection: NSObject {
-    let service:NetService
-    var socket:GCDAsyncSocket? = nil
-    var isConnected:Bool { self.socket?.isConnected ?? false }
+class BonjourConnection: NSObject, ObservableObject {
+    private let service:NetService
+    private var socket:GCDAsyncSocket? = nil
+    @Published var isConnected:Bool = false
     
     init(_ service:NetService) {
         self.service = service
@@ -61,12 +61,14 @@ extension BonjourConnection : NetServiceDelegate {
 extension BonjourConnection : GCDAsyncSocketDelegate {
     func socket(_ sock: GCDAsyncSocket, didConnectToHost host: String, port: UInt16) {
         print("socket:didConnectToHost", self.isConnected, sock.connectedAddress, sock.localAddress, sock.localPort)
+        isConnected = true
         sock.readData(withTimeout: -1, tag: 3)
     }
     
     func socketDidDisconnect(_ sock: GCDAsyncSocket, withError err: Error?) {
         print("socket:didDisconnect")
-        self.socket = nil
+        socket = nil
+        isConnected = false
     }
     
     func socket(_ sock: GCDAsyncSocket, didRead data: Data, withTag tag: Int) {

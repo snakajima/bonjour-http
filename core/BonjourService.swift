@@ -40,6 +40,10 @@ import CocoaAsyncSocket
     
     func stop() {
         if let service = self.service {
+            clients.forEach { (socket) in
+                socket.disconnect()
+            }
+            clients.removeAll()
             service.stop()
             service.delegate = nil
             self.service = nil

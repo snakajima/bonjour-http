@@ -8,8 +8,9 @@
 import SwiftUI
 
 struct ServiceView: View {
+    @Environment(\.presentationMode) var presentation
     let service:NetService
-    let connection:BonjourConnection
+    @ObservedObject var connection:BonjourConnection
     init(service:NetService) {
         self.service = service
         self.connection = BonjourConnection(service)
@@ -18,6 +19,13 @@ struct ServiceView: View {
     var body: some View {
         VStack {
             Text(service.name)
+            if connection.isConnected {
+                Text("Connected")
+                    .onDisappear() {
+                        print("disconnected")
+                        self.presentation.wrappedValue.dismiss()
+                    }
+            }
             Button(action: {
                 connection.send(string: "Hello World")
             }, label: {
