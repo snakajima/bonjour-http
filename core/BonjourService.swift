@@ -17,7 +17,7 @@ import CocoaAsyncSocket
         }
     }
     private var hostSocket = GCDAsyncSocket()
-    private var clients = [GCDAsyncSocket]()
+    @Published public var clients = [GCDAsyncSocket]()
     @Published public var isRunning = false
 
     init(type:String) {
@@ -28,7 +28,7 @@ import CocoaAsyncSocket
         hostSocket = GCDAsyncSocket(delegate: self, delegateQueue: .main)
         do {
             try hostSocket.accept(onPort: 0)
-            print("socket created")
+            print("socket created", hostSocket.localPort)
             let service = NetService(domain: "local.", type: type, name: "", port: Int32(hostSocket.localPort))
             service.delegate = self
             service.publish()
@@ -84,6 +84,7 @@ extension BonjourService : GCDAsyncSocketDelegate {
     
     func socketDidDisconnect(_ sock: GCDAsyncSocket, withError err: Error?) {
         print("socketDidDisconnect")
+        clients = clients.filter { $0 != sock }
     }
 }
 

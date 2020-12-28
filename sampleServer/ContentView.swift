@@ -6,6 +6,10 @@
 //
 
 import SwiftUI
+import CocoaAsyncSocket
+
+extension GCDAsyncSocket : Identifiable {
+}
 
 struct ContentView: View {
     @ObservedObject var service = BonjourService(type:"_samplehttp._tcp")
@@ -13,6 +17,11 @@ struct ContentView: View {
         VStack {
             Text("Hello, world!")
                 .padding()
+            List {
+                ForEach(service.clients) { socket in
+                    Text("Client")
+                }
+            }
             if service.isRunning {
                 Button(action: {
                     service.stop()
