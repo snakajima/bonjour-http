@@ -34,9 +34,8 @@ extension BonjourBrowser : NetServiceBrowserDelegate {
     }
     
     func netServiceBrowser(_ browser: NetServiceBrowser, didRemove service: NetService, moreComing: Bool) {
-        print("netServiceBroser:didRemove before", services.count)
-        services = services.filter { $0 !== service }
-        print("netServiceBroser:didRemove after", services.count)
+        services = services.filter { $0 != service }
+        print("netServiceBroser:didRemove", service, services.count)
     }
     
     func netServiceBrowserDidStopSearch(_ browser: NetServiceBrowser) {
