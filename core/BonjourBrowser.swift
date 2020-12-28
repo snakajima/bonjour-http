@@ -11,11 +11,11 @@ extension NetService : Identifiable {
 }
 
 class BonjourBrowser: NSObject, ObservableObject {
-    let type:String
+    let type: String
     private var serviceBrowser = NetServiceBrowser()
     @Published var services = [NetService]()
     
-    init(_ type:String) {
+    init(_ type: String) {
         self.type = type
     }
 
