@@ -12,13 +12,14 @@ struct BonjourRequest {
     let method:String
     let path:String
     let proto:String
-    var headers = [String:String]()
+    var headers:[String:String]
     var body:Data?
     
     init(path: String, method: String = "GET") {
         self.path = path
         self.method = method
         self.proto = "HTTP/1.1"
+        self.headers = [:]
     }
 
     mutating func setBody(string: String, type: String="text/html") {
@@ -37,6 +38,7 @@ struct BonjourRequest {
     
     enum ParserError : Error {
         case incompleteHeader
+        case invalidFirstLine
     }
     
     static func extractHeader(data:Data) throws -> (Data, Data?) {
@@ -64,30 +66,33 @@ struct BonjourRequest {
         return (headerData, body)
     }
     
-    //static func extractHeaders(headerData:Data) -> (String, [String:String])
+    static func extractHeaders(headerData:Data) -> (String, [String:String]) {
+        let string = String(decoding:headerData, as:UTF8.self)
+        var lines = string.components(separatedBy: "\n").map { $0.trimmingCharacters(in: CharacterSet(arrayLiteral: "\r"))}
+        let firstLine = lines.removeFirst()
+        var headers = [String:String]()
+        
+        lines.forEach { line in
+            let parts = line.split(separator: ":", maxSplits: 1).map(String.init)
+                            .map { $0.trimmingCharacters(in: CharacterSet.whitespaces )}
+            if parts.count == 2 {
+                headers[parts.first!] = parts.last!
+            }
+        }
+        return (firstLine, headers)
+    }
 
     init?(data:Data) {
         do {
             let (headerData, body) = try Self.extractHeader(data: data)
-            self.body = body
-            
-            let string = String(decoding:headerData, as:UTF8.self)
-            var lines = string.components(separatedBy: "\n").map { $0.trimmingCharacters(in: CharacterSet(arrayLiteral: "\r"))}
-
-            let parts = lines.removeFirst().components(separatedBy: " ")
+            let (firstLine, headers) = Self.extractHeaders(headerData: headerData)
+            let parts = firstLine.components(separatedBy: " ")
             guard parts.count == 3 else {
-                print("invalid first line", parts)
-                return nil
+                throw ParserError.invalidFirstLine
             }
             (method, path, proto) = (parts[0], parts[1], parts[2])
-            
-            lines.forEach { line in
-                let parts = line.split(separator: ":", maxSplits: 1).map(String.init)
-                                .map { $0.trimmingCharacters(in: CharacterSet.whitespaces )}
-                if parts.count == 2 {
-                    headers[parts.first!] = parts.last!
-                }
-            }
+            self.body = body
+            self.headers = headers
         } catch {
             print("### Error", error)
             return nil
