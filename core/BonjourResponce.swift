@@ -29,7 +29,6 @@ struct BonjourResponce {
             self.body = body
             self.headers = headers
         } catch {
-            print("### Error", error)
             return nil
         }
     }

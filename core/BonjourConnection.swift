@@ -77,11 +77,13 @@ extension BonjourConnection : GCDAsyncSocketDelegate {
         sock.readData(withTimeout: -1, tag: 3)
         if let _ = self.buffer {
             buffer!.append(data)
+            //print("appended", String(decoding: data, as: UTF8.self))
         } else {
             buffer = data
         }
         guard let res = BonjourResponce(data: buffer!) else {
-            print("buffering")
+            //print("buffering", String(decoding: buffer!, as: UTF8.self))
+            print("buffering", buffer!.count)
             return
         }
         buffer = nil

@@ -12,6 +12,7 @@ class BonjourParser {
         case invalidFirstLine
         case incompleteHeader
         case incompleteBody
+        case missingContentLength
     }
     
     private static func extractHeader(data:Data) throws -> (Data, Data?) {
@@ -59,6 +60,13 @@ class BonjourParser {
     static func parseHeader(data: Data) throws -> (String, [String:String], Data?) {
         let (headerData, body) = try BonjourParser.extractHeader(data: data)
         let (firstLine, headers) = BonjourParser.extractHeaders(headerData: headerData)
+        if let length = headers["Content-Length"] {
+            guard let body = body,body.count == Int(length) else {
+                throw ParserError.incompleteBody
+            }
+        } else if let _ = body {
+            throw ParserError.missingContentLength
+        }
         return (firstLine, headers, body)
     }
 }
