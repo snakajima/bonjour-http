@@ -6,11 +6,13 @@
 //
 
 import Foundation
+import CocoaAsyncSocket
 
 class HTTPServer : NSObject {
 }
 
 extension HTTPServer : BonjourServiceDelegate {
-    func on(reqeust: HTTPRequest, service: BonjourService) {
+    func on(reqeust: HTTPRequest, service: BonjourService, socket: GCDAsyncSocket) {
+        service.send(to: socket, string: "Merry X'mas")
     }
 }
