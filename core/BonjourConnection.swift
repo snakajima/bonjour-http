@@ -14,7 +14,6 @@ class BonjourConnection: NSObject {
     var isConnected:Bool { self.socket?.isConnected ?? false }
     
     init(_ service:NetService) {
-        print("BonjourConection init", service.addresses ?? [])
         self.service = service
         super.init()
         service.delegate = self

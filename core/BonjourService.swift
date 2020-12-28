@@ -9,11 +9,16 @@
 import Foundation
 import CocoaAsyncSocket
 
-@objc class BonjourService : NSObject {
+@objc class BonjourService : NSObject, ObservableObject {
     let type:String
-    private var service = NetService()
+    private var service:NetService? {
+        didSet {
+            isRunning = service != nil
+        }
+    }
     private var hostSocket = GCDAsyncSocket()
     private var clientSocket:GCDAsyncSocket?
+    @Published public var isRunning = false
 
     init(type:String) {
         self.type = type
@@ -24,11 +29,20 @@ import CocoaAsyncSocket
         do {
             try hostSocket.accept(onPort: 0)
             print("socket created")
-            service = NetService(domain: "local.", type: type, name: "", port: Int32(hostSocket.localPort))
+            let service = NetService(domain: "local.", type: type, name: "", port: Int32(hostSocket.localPort))
             service.delegate = self
             service.publish()
+            self.service = service
         } catch {
             print("socket.accept failed", error)
+        }
+    }
+    
+    func stop() {
+        if let service = self.service {
+            service.stop()
+            service.delegate = nil
+            self.service = nil
         }
     }
     
