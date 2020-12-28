@@ -27,6 +27,12 @@
 		74477F0A2599B6ED00C73577 /* BonjourResponce.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74477F062599B40E00C73577 /* BonjourResponce.swift */; };
 		74477F18259A2CA800C73577 /* BonjourParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74477F17259A2CA800C73577 /* BonjourParser.swift */; };
 		74477F19259A2CA800C73577 /* BonjourParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74477F17259A2CA800C73577 /* BonjourParser.swift */; };
+		74477F1F259A45A700C73577 /* bonjour-http.podspec in Resources */ = {isa = PBXBuildFile; fileRef = 74477F1E259A45A700C73577 /* bonjour-http.podspec */; };
+		74477F20259A45A700C73577 /* bonjour-http.podspec in Resources */ = {isa = PBXBuildFile; fileRef = 74477F1E259A45A700C73577 /* bonjour-http.podspec */; };
+		74477F24259A479800C73577 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 74477F23259A479800C73577 /* LICENSE */; };
+		74477F25259A479800C73577 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 74477F23259A479800C73577 /* LICENSE */; };
+		74477F29259A47A300C73577 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 74477F28259A47A300C73577 /* README.md */; };
+		74477F2A259A47A300C73577 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 74477F28259A47A300C73577 /* README.md */; };
 		ED11A73978AFEE617A297E5F /* Pods_sampleClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 59DD8DAC7EC52A66DB68E6CE /* Pods_sampleClient.framework */; };
 /* End PBXBuildFile section */
 
@@ -54,6 +60,9 @@
 		74477EFA2599AAB400C73577 /* SampleHTTPServer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleHTTPServer.swift; sourceTree = "<group>"; };
 		74477F062599B40E00C73577 /* BonjourResponce.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BonjourResponce.swift; sourceTree = "<group>"; };
 		74477F17259A2CA800C73577 /* BonjourParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BonjourParser.swift; sourceTree = "<group>"; };
+		74477F1E259A45A700C73577 /* bonjour-http.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "bonjour-http.podspec"; sourceTree = "<group>"; };
+		74477F23259A479800C73577 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		74477F28259A47A300C73577 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		7D9864B4A1FDB8C40D95C245 /* Pods-sampleClient.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-sampleClient.debug.xcconfig"; path = "Target Support Files/Pods-sampleClient/Pods-sampleClient.debug.xcconfig"; sourceTree = "<group>"; };
 		99C09FBDEFC6FEF5B6A4A16C /* Pods-sampleClient.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-sampleClient.release.xcconfig"; path = "Target Support Files/Pods-sampleClient/Pods-sampleClient.release.xcconfig"; sourceTree = "<group>"; };
 		B30BDF6643E49594A5D2E805 /* Pods-sampleServer.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-sampleServer.debug.xcconfig"; path = "Target Support Files/Pods-sampleServer/Pods-sampleServer.debug.xcconfig"; sourceTree = "<group>"; };
@@ -94,6 +103,9 @@
 		74477E9F25991C9C00C73577 = {
 			isa = PBXGroup;
 			children = (
+				74477F28259A47A300C73577 /* README.md */,
+				74477F23259A479800C73577 /* LICENSE */,
+				74477F1E259A45A700C73577 /* bonjour-http.podspec */,
 				74477EC025991DCB00C73577 /* core */,
 				74477EAC25991D0800C73577 /* sampleClient */,
 				74477ED025992F5500C73577 /* sampleServer */,
@@ -260,6 +272,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				74477EB525991D0900C73577 /* Preview Assets.xcassets in Resources */,
+				74477F1F259A45A700C73577 /* bonjour-http.podspec in Resources */,
+				74477F29259A47A300C73577 /* README.md in Resources */,
+				74477F24259A479800C73577 /* LICENSE in Resources */,
 				74477EB225991D0900C73577 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -269,6 +284,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				74477ED925992F5600C73577 /* Preview Assets.xcassets in Resources */,
+				74477F20259A45A700C73577 /* bonjour-http.podspec in Resources */,
+				74477F2A259A47A300C73577 /* README.md in Resources */,
+				74477F25259A479800C73577 /* LICENSE in Resources */,
 				74477ED625992F5600C73577 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
