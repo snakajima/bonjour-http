@@ -10,7 +10,7 @@ import CocoaAsyncSocket
 
 class SampleHTTPServer : NSObject, BonjourServiceDelegate {
     func on(reqeust: BonjourRequest, service: BonjourService, socket: GCDAsyncSocket) {
-        var res = BonjourReponce(request: reqeust)
+        var res = BonjourResponce(request: reqeust)
         res.setBody(string: "<html><body>Hello World!</body></html>")
         service.send(responce: res, to: socket)
     }

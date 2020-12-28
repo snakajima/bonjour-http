@@ -58,7 +58,7 @@ protocol BonjourServiceDelegate: NSObjectProtocol {
         }
     }
     
-    func send(responce: BonjourReponce, to socket: GCDAsyncSocket) {
+    func send(responce: BonjourResponce, to socket: GCDAsyncSocket) {
         socket.write(responce.headerData, withTimeout: -1.0, tag: 3)
         if let body = responce.body {
             socket.write(body, withTimeout: -1.0, tag: 3)
@@ -84,14 +84,14 @@ extension BonjourService : GCDAsyncSocketDelegate {
             print("### HTTPParser failed")
             return
         }
-        print("http", http)
+        print("req:", http)
         if let delegate = self.delegate {
             delegate.on(reqeust: http, service: self, socket: sock)
         }
     }
     
     func socket(_ sock: GCDAsyncSocket, didWriteDataWithTag tag: Int) {
-        print("socket:didWriteDataWithTag")
+        //print("socket:didWriteDataWithTag")
     }
     
     func socket(_ sock: GCDAsyncSocket, didConnectToHost host: String, port: UInt16) {

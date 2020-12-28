@@ -56,8 +56,8 @@ struct BonjourRequest {
 extension BonjourRequest : CustomStringConvertible {
     var description: String {
         guard let body = body else {
-            return "Method:\(method), Path:\(path), Protocol:\(proto)"
+            return "\(method) \(path) \(proto)"
         }
-        return "Method:\(method), Path:\(path), Protocol:\(proto), Body:\(body.count)"
+        return "\(method) \(path) \(proto), Body:\(body.count)"
     }
 }

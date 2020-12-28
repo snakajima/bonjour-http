@@ -74,11 +74,11 @@ extension BonjourConnection : GCDAsyncSocketDelegate {
     
     func socket(_ sock: GCDAsyncSocket, didRead data: Data, withTag tag: Int) {
         sock.readData(withTimeout: -1, tag: 3)
-        let res = BonjourReponce(data: data)
-        print("socket:didRead", res ?? "N/A")
+        let res = BonjourResponce(data: data)
+        print("res:", res ?? "N/A")
     }
     
     func socket(_ sock: GCDAsyncSocket, didWriteDataWithTag tag: Int) {
-        print("socket:didWriteDataWithTag")
+        // print("socket:didWriteDataWithTag")
     }
 }
