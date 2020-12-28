@@ -22,7 +22,7 @@
 		74477EE225992F7F00C73577 /* BonjourService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74477EE125992F7F00C73577 /* BonjourService.swift */; };
 		74477EEE2599977300C73577 /* BonjourRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74477EED2599977300C73577 /* BonjourRequest.swift */; };
 		74477EEF2599977300C73577 /* BonjourRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74477EED2599977300C73577 /* BonjourRequest.swift */; };
-		74477EFB2599AAB400C73577 /* HTTPServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74477EFA2599AAB400C73577 /* HTTPServer.swift */; };
+		74477EFB2599AAB400C73577 /* SampleHTTPServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74477EFA2599AAB400C73577 /* SampleHTTPServer.swift */; };
 		74477F072599B40E00C73577 /* BonjourResponce.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74477F062599B40E00C73577 /* BonjourResponce.swift */; };
 		74477F0A2599B6ED00C73577 /* BonjourResponce.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74477F062599B40E00C73577 /* BonjourResponce.swift */; };
 		ED11A73978AFEE617A297E5F /* Pods_sampleClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 59DD8DAC7EC52A66DB68E6CE /* Pods_sampleClient.framework */; };
@@ -49,7 +49,7 @@
 		74477EDB25992F5600C73577 /* sampleServer.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = sampleServer.entitlements; sourceTree = "<group>"; };
 		74477EE125992F7F00C73577 /* BonjourService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BonjourService.swift; sourceTree = "<group>"; };
 		74477EED2599977300C73577 /* BonjourRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BonjourRequest.swift; sourceTree = "<group>"; };
-		74477EFA2599AAB400C73577 /* HTTPServer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPServer.swift; sourceTree = "<group>"; };
+		74477EFA2599AAB400C73577 /* SampleHTTPServer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleHTTPServer.swift; sourceTree = "<group>"; };
 		74477F062599B40E00C73577 /* BonjourResponce.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BonjourResponce.swift; sourceTree = "<group>"; };
 		7D9864B4A1FDB8C40D95C245 /* Pods-sampleClient.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-sampleClient.debug.xcconfig"; path = "Target Support Files/Pods-sampleClient/Pods-sampleClient.debug.xcconfig"; sourceTree = "<group>"; };
 		99C09FBDEFC6FEF5B6A4A16C /* Pods-sampleClient.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-sampleClient.release.xcconfig"; path = "Target Support Files/Pods-sampleClient/Pods-sampleClient.release.xcconfig"; sourceTree = "<group>"; };
@@ -147,7 +147,7 @@
 			children = (
 				74477ED125992F5500C73577 /* sampleServerApp.swift */,
 				74477ED325992F5500C73577 /* ContentView.swift */,
-				74477EFA2599AAB400C73577 /* HTTPServer.swift */,
+				74477EFA2599AAB400C73577 /* SampleHTTPServer.swift */,
 				74477ED525992F5600C73577 /* Assets.xcassets */,
 				74477EDA25992F5600C73577 /* Info.plist */,
 				74477EDB25992F5600C73577 /* sampleServer.entitlements */,
@@ -373,7 +373,7 @@
 			files = (
 				74477EEF2599977300C73577 /* BonjourRequest.swift in Sources */,
 				74477ED425992F5500C73577 /* ContentView.swift in Sources */,
-				74477EFB2599AAB400C73577 /* HTTPServer.swift in Sources */,
+				74477EFB2599AAB400C73577 /* SampleHTTPServer.swift in Sources */,
 				74477EE225992F7F00C73577 /* BonjourService.swift in Sources */,
 				74477F072599B40E00C73577 /* BonjourResponce.swift in Sources */,
 				74477ED225992F5500C73577 /* sampleServerApp.swift in Sources */,
