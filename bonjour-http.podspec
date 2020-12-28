@@ -13,6 +13,7 @@ Pod::Spec.new do |s|
   s.source           = { :git => 'https://github.com/snakajima/bonjour-http.git', :tag => s.version.to_s }
  
   s.ios.deployment_target = '13.0'
+  s.osx.deployment_target = '11.0'
   s.source_files = 'core/*.swift'
   s.swift_versions = '5.0'
   s.dependency 'CocoaAsyncSocket'
