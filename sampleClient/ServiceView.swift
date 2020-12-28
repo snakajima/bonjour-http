@@ -28,7 +28,7 @@ struct ServiceView: View {
             }
             Button(action: {
                 let req = BonjourRequest(path: "/foo")
-                connection.send(string: "Hello World")
+                connection.send(req: req)
             }, label: {
                 Text("Hello")
             })

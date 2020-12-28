@@ -39,13 +39,11 @@ class BonjourConnection: NSObject, ObservableObject {
         }
     }
     
-    func send(string: String) {
-        let data = Data(string.utf8)
-        socket?.write(data, withTimeout: -1.0, tag: 3)
-    }
-
     func send(req: BonjourRequest) {
-        //socket?.write()
+        socket?.write(req.headerData, withTimeout: -1.0, tag: 3)
+        if let body = req.body {
+            socket?.write(body, withTimeout: -1.0, tag: 3)
+        }
     }
 }
 
