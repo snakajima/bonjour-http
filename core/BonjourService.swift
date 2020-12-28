@@ -9,9 +9,15 @@
 import Foundation
 import CocoaAsyncSocket
 
+protocol BonjourServiceDelegate: NSObjectProtocol {
+    func on(reqeust: HTTPRequest)
+}
+
 @objc class BonjourService : NSObject, ObservableObject {
     let type:String
     let port:UInt16
+    weak var delegate:BonjourServiceDelegate?
+    
     private var service:NetService? {
         didSet {
             isRunning = service != nil
@@ -72,13 +78,14 @@ extension BonjourService : GCDAsyncSocketDelegate {
         sock.readData(withTimeout: -1, tag: 3)
         
         // WARNING: Following code assumes that we receive the HTTP request in one packet.
-        guard let http = HTTPParser(data: data) else {
+        guard let http = HTTPRequest(data: data) else {
             print("### HTTPParser failed")
             return
         }
         print("http", http)
-
-        send(to: sock, string: "How are you?")
+        if let delegate = self.delegate {
+            delegate.on(reqeust: http)
+        }
     }
     
     func socket(_ sock: GCDAsyncSocket, didWriteDataWithTag tag: Int) {

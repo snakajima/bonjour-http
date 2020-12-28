@@ -7,12 +7,12 @@
 
 import Foundation
 
-struct HTTPParser {
+struct HTTPRequest {
     let method:String
     let path:String
     let proto:String
-    let headers:[String:String]
-    let body:Data?
+    var headers = [String:String]()
+    var body:Data?
     
     init?(data:Data) {
         let rows = data.split(separator: 0x0a)
@@ -47,7 +47,6 @@ struct HTTPParser {
         }
         (method, path, proto) = (parts[0], parts[1], parts[2])
         
-        var headers = [String:String]()
         lines.forEach { line in
             let parts = line.split(separator: ":", maxSplits: 1).map(String.init)
                             .map { $0.trimmingCharacters(in: CharacterSet.whitespaces )}
@@ -55,11 +54,10 @@ struct HTTPParser {
                 headers[parts.first!] = parts.last!
             }
         }
-        self.headers = headers
     }
 }
 
-extension HTTPParser : CustomStringConvertible {
+extension HTTPRequest : CustomStringConvertible {
     var description: String {
         guard let body = body else {
             return "Method:\(method), Path:\(path), Protocol:\(proto)"
