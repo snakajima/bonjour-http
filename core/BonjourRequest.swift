@@ -9,12 +9,18 @@ import Foundation
 import CocoaAsyncSocket
 
 struct BonjourRequest {
-    let method:String
-    let path:String
-    let proto:String
-    var headers:[String:String]
-    var body:Data?
-    
+    let method: String
+    let path: String
+    let proto: String
+    var headers: [String:String]
+    var body: Data?
+    var headerData: Data {
+        let headersSection = headers.map {
+            "\($0):\($1)"
+        }.joined(separator: "\r\n")
+        return Data("\(method) \(path) \(proto)\r\n\(headersSection)\r\n\r\n".utf8)
+    }
+
     init(path: String, method: String = "GET") {
         self.path = path
         self.method = method
@@ -29,14 +35,7 @@ struct BonjourRequest {
         headers["charset"] = "UTF-8"
     }
     
-    var headerData:Data {
-        let headersSection = headers.map {
-            "\($0):\($1)"
-        }.joined(separator: "\r\n")
-        return Data("\(method) \(path) \(proto)\r\n\(headersSection)\r\n\r\n".utf8)
-    }
-
-    init?(data:Data) {
+    init?(data: Data) {
         do {
             let (firstLine, headers, body) = try BonjourParser.parseHeader(data: data)
             let parts = firstLine.components(separatedBy: " ")

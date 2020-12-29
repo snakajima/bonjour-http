@@ -14,10 +14,9 @@ protocol BonjourServiceDelegate: NSObjectProtocol {
 }
 
 @objc class BonjourService : NSObject, ObservableObject {
-    let type:String
-    let port:UInt16
+    let type: String
+    let port: UInt16
     weak var delegate:BonjourServiceDelegate?
-    
     private var service:NetService? {
         didSet {
             isRunning = service != nil
@@ -36,13 +35,12 @@ protocol BonjourServiceDelegate: NSObjectProtocol {
         hostSocket = GCDAsyncSocket(delegate: self, delegateQueue: .main)
         do {
             try hostSocket.accept(onPort: port)
-            print("socket created", hostSocket.localPort)
             let service = NetService(domain: "local.", type: type, name: "", port: Int32(hostSocket.localPort))
             service.delegate = self
             service.publish()
             self.service = service
         } catch {
-            print("socket.accept failed", error)
+            print("### Error socket.accept failed", error)
         }
     }
     
@@ -73,7 +71,6 @@ extension BonjourService : GCDAsyncSocketDelegate {
         newSocket.delegate = self
         newSocket.delegateQueue = .main
         newSocket.readData(withTimeout: -1, tag: 3)
-        //newSocket.readData(toLength: UInt(MemoryLayout<UInt64>.size), withTimeout: -1.0, tag: 3)
     }
     
     func socket(_ sock: GCDAsyncSocket, didRead data: Data, withTag tag: Int) {
@@ -91,7 +88,6 @@ extension BonjourService : GCDAsyncSocketDelegate {
     }
     
     func socket(_ sock: GCDAsyncSocket, didWriteDataWithTag tag: Int) {
-        //print("socket:didWriteDataWithTag")
     }
     
     func socket(_ sock: GCDAsyncSocket, didConnectToHost host: String, port: UInt16) {

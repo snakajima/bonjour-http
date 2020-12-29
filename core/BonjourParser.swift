@@ -16,12 +16,13 @@ class BonjourParser {
     }
     
     private static func extractHeader(data:Data) throws -> (Data, Data?) {
-        // LATER: Optimize it for a very large body
+        // LATER: Optimize it for a very large body (such as images)
         let rows = data.split(separator: 0x0a)
         var headerLength = 0
         var counter = 0
         rows.forEach { (row) in
-            if row.count == 1 && String(decoding:row, as:UTF8.self) == "\r" {
+            if row.count == 1 && headerLength == 0
+                && String(decoding:row, as:UTF8.self) == "\r" {
                 headerLength = counter
             } else {
                 counter += row.count + 1
@@ -41,8 +42,8 @@ class BonjourParser {
         return (headerData, body)
     }
     
-    private static func extractHeaders(headerData:Data) -> (String, [String:String]) {
-        let string = String(decoding:headerData, as:UTF8.self)
+    private static func extractHeaders(headerData: Data) -> (String, [String:String]) {
+        let string = String(decoding: headerData, as: UTF8.self)
         var lines = string.components(separatedBy: "\n").map { $0.trimmingCharacters(in: CharacterSet(arrayLiteral: "\r"))}
         let firstLine = lines.removeFirst()
         var headers = [String:String]()
