@@ -9,7 +9,6 @@ import Foundation
 
 class BonjourParser {
     enum ParserError : Error {
-        case invalidFirstLine
         case incompleteHeader
         case incompleteBody
         case missingContentLength

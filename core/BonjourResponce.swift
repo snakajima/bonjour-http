@@ -9,8 +9,7 @@ import Foundation
 
 struct BonjourResponce {
     let proto: String
-    var status = "200"
-    var statusText = "OK"
+    var statusText = "200 OK"
     var body: Data? = nil
     var headers = [String:String]()
     
@@ -21,11 +20,9 @@ struct BonjourResponce {
     init?(data: Data) {
         do {
             let (firstLine, headers, body) = try BonjourParser.parseHeader(data: data)
-            let parts = firstLine.components(separatedBy: " ")
-            guard parts.count == 3 else {
-                throw BonjourParser.ParserError.invalidFirstLine
-            }
-            (proto, status, statusText) = (parts[0], parts[1], parts[2])
+            var parts = firstLine.components(separatedBy: " ")
+            proto = parts.removeFirst()
+            statusText = parts.joined(separator: " ")
             self.body = body
             self.headers = headers
         } catch {
@@ -45,7 +42,7 @@ struct BonjourResponce {
             "\($0):\($1)"
         }.joined(separator: "\r\n")
         return Data(
-            ("\(proto) \(status) \(statusText)\r\n"
+            ("\(proto) \(statusText)\r\n"
             + "\(headersSection)\r\n\r\n").utf8)
     }
 }
@@ -53,8 +50,8 @@ struct BonjourResponce {
 extension BonjourResponce : CustomStringConvertible {
     var description: String {
         guard let body = body else {
-            return "\(proto) \(status) \(statusText)"
+            return "\(proto) \(statusText)"
         }
-        return "\(proto) \(status) \(statusText), Body:\(body.count)"
+        return "\(proto) \(statusText), Body:\(body.count)"
     }
 }

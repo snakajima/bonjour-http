@@ -16,8 +16,7 @@ class SampleHTTPServer : NSObject, BonjourServiceDelegate {
             res.setBody(string: "<html><body>Hello World!</body></html>")
         default:
             res.setBody(string: "<html><body>Page Not Found</body></html>")
-            res.status = "404"
-            res.statusText = "Not Found"
+            res.statusText = "404 Not Found"
         }
         service.send(responce: res, to: socket)
     }

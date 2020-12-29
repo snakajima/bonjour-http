@@ -26,9 +26,14 @@ Here is an example, which always returns "Hello World!" page regardless of the p
 class SampleHTTPServer : NSObject, BonjourServiceDelegate {
     func on(reqeust: BonjourRequest, service: BonjourService, socket: GCDAsyncSocket) {
         var res = BonjourResponce()
-        res.setBody(string: "<html><body>Hello World!</body></html>")
+        switch(reqeust.path) {
+        case "/":
+            res.setBody(string: "<html><body>Hello World!</body></html>")
+        default:
+            res.setBody(string: "<html><body>Page Not Found</body></html>")
+            res.statusText = "404 Not Found"
+        }
         service.send(responce: res, to: socket)
     }
 }
-
 ```

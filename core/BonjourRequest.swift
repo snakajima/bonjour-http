@@ -39,10 +39,13 @@ struct BonjourRequest {
         do {
             let (firstLine, headers, body) = try BonjourParser.parseHeader(data: data)
             let parts = firstLine.components(separatedBy: " ")
-            guard parts.count == 3 else {
-                throw BonjourParser.ParserError.invalidFirstLine
+            if parts.count == 3 {
+                (method, path, proto) = (parts[0], parts[1], parts[2])
+            } else {
+                // Treat invalid header as the access to the root
+                print("### ERROR Invalid Fist Line", firstLine)
+                (method, path, proto) = ("GET", "/", "HTTP/1.1")
             }
-            (method, path, proto) = (parts[0], parts[1], parts[2])
             self.body = body
             self.headers = headers
         } catch {
