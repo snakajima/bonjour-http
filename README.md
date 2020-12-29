@@ -10,11 +10,11 @@ Bonjour is a great mechanism to establish connections among devices on a local n
 
 **BonjourBrowser** allows an application to discover Bonjour services (NetService objects) with specific type, and present them to the user to choose from (note: this library has no UI code).
 
-**BonjourConnection** allows an application to establish a connection between a Bonjour service selected by the user.
+**BonjourConnection** allows an application to establish a connection between a Bonjour service selected by the user. The application calls its send(req:) method to send an HTTP request to the connected sever. In order to receive responces from the server, the application needs to create an object, which implements **BonjourConnectionDelegate** protocol. 
 
-**BonjourRequest** represents a HTTP request, which an application creates and send using an established BonjourConnection.
+**BonjourRequest** represents an HTTP request, which an application creates and send using an established BonjourConnection.
 
-**BonjourResponce** represents a HTTP responce from the Bonjour server. 
+**BonjourResponce** represents an HTTP responce from the Bonjour server. 
 
 ## Classes for Server
 
