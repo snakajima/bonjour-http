@@ -8,8 +8,13 @@
 import Foundation
 import CocoaAsyncSocket
 
+protocol BonjourConnectionDelegate : NSObjectProtocol {
+    func on(responce: BonjourResponce, connection: BonjourConnection)
+}
+
 class BonjourConnection: NSObject, ObservableObject {
     @Published var isConnected = false
+    public weak var delegate: BonjourConnectionDelegate?
     private let service: NetService
     private var socket: GCDAsyncSocket? = nil
     private var buffer: Data? = nil
@@ -85,7 +90,7 @@ extension BonjourConnection : GCDAsyncSocketDelegate {
             return
         }
         buffer = nil
-        print("res:", res)
+        delegate?.on(responce: res, connection: self)
     }
     
     func socket(_ sock: GCDAsyncSocket, didWriteDataWithTag tag: Int) {

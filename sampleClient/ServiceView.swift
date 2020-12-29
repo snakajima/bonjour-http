@@ -11,9 +11,11 @@ struct ServiceView: View {
     @Environment(\.presentationMode) var presentation
     let service:NetService
     @ObservedObject var connection:BonjourConnection
+    private let client = SampleHTTPClient()
     init(service:NetService) {
         self.service = service
         self.connection = BonjourConnection(service)
+        self.connection.delegate = client
     }
     
     var body: some View {
