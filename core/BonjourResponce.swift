@@ -14,8 +14,8 @@ struct BonjourResponce {
     var body:Data? = nil
     var headers = [String:String]()
     
-    init(request:BonjourRequest) {
-        proto = request.proto
+    init() {
+        proto = "HTTP/1.1"
     }
 
     init?(data:Data) {
