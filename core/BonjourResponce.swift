@@ -8,17 +8,17 @@
 import Foundation
 
 struct BonjourResponce {
-    let proto:String
+    let proto: String
     var status = "200"
     var statusText = "OK"
-    var body:Data? = nil
+    var body: Data? = nil
     var headers = [String:String]()
     
     init() {
         proto = "HTTP/1.1"
     }
 
-    init?(data:Data) {
+    init?(data: Data) {
         do {
             let (firstLine, headers, body) = try BonjourParser.parseHeader(data: data)
             let parts = firstLine.components(separatedBy: " ")
