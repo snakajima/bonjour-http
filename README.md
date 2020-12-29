@@ -1,6 +1,6 @@
 # bonjour-http
 
-This library makes it easy to use Bonjour connections among Apple devices (Mac, iPhone, iPad and Apple TV) and use HTTP as the Applicatio layer  protocol. 
+This library makes it easy to use Bonjour connections among Apple devices (Mac, iPhone, iPad and Apple TV) and use HTTP as the Application layer protocol. 
 
 ## Why HTTP?
 
