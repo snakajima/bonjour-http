@@ -1,6 +1,6 @@
 # bonjour-http
 
-This library makes it easy to use bonjour connections among Apple devices (Mac, iPhone, iPad and Apple TV) and use HTTP as the Applicatio layer  protocol. 
+This library makes it easy to use Bonjour connections among Apple devices (Mac, iPhone, iPad and Apple TV) and use HTTP as the Applicatio layer  protocol. 
 
 ## Why HTTP?
 
@@ -8,17 +8,17 @@ Bonjour is a great mechanism to establish connections among devices on a local n
 
 ## Classes for Client
 
-BonjourBrowser allows an application to discover bonjour services (NetService objects) with specific type, and present them to the user to choose from (note: this library has no UI code).
+**BonjourBrowser** allows an application to discover Bonjour services (NetService objects) with specific type, and present them to the user to choose from (note: this library has no UI code).
 
-BonjourConnection allows an application to establish a connection between a bonjour service selected by the user.
+**BonjourConnection** allows an application to establish a connection between a Bonjour service selected by the user.
 
-BonjourRequest represents a HTTP request, which an application creates and send using an established BonjourConnection.
+**BonjourRequest** represents a HTTP request, which an application creates and send using an established BonjourConnection.
 
-BonjourResponce represents a HTTP responce from the Bonjour server. 
+**BonjourResponce** represents a HTTP responce from the Bonjour server. 
 
 ## Classes for Server
 
-BonjourService allows an application to publish a specific type of Bonjour service. An application needs to define a class respresenting HTTP server, which implements BonjourServiceDelegate protocol. 
+**BonjourService** allows an application to publish a specific type of Bonjour service. An application needs to define a class respresenting HTTP server, which implements **BonjourServiceDelegate** protocol. 
 
 Here is an example, which always returns "Hello World!" page regardless of the path.
 
