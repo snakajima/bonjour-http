@@ -98,7 +98,7 @@ extension BonjourService : GCDAsyncSocketDelegate {
             let components = req.path.components(separatedBy: "/")
             if components.count == 4, components[0] == "" && components[1] == "api" {
                 print("API call", components[2], components[3])
-                let json = [String:Any]()
+                let json = req.jsonBody ?? [:]
                 delegate.on(function: components[2], service: self, params: json, socket: sock, context: components[3])
                 return
             }

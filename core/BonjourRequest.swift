@@ -44,6 +44,13 @@ struct BonjourRequest {
             print("BonjourRequest: setBodyJson failed")
         }
     }
+    
+    var jsonBody:[String:Any]? {
+        guard let body = body, headers["Content-Type"] == "application/json" else {
+            return nil
+        }
+        return try? JSONSerialization.jsonObject(with: body, options: []) as? [String:Any]
+    }
 
     init?(data: Data) {
         do {
