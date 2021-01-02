@@ -9,19 +9,7 @@ import Foundation
 import CocoaAsyncSocket
 
 class SampleHTTPServer : NSObject, BonjourServiceDelegate {
-    func service(_ service: BonjourService, onRequest request: BonjourRequest, socket: GCDAsyncSocket) {
-        var res = BonjourResponce()
-        switch(request.path) {
-        case "/":
-            res.setBody(string: "<html><body>Hello World!</body></html>")
-        default:
-            res.setBody(string: "<html><body>Page Not Found</body></html>")
-            res.statusText = "404 Not Found"
-        }
-        service.send(responce: res, to: socket)
-    }
-    
-    func on(function: String, service: BonjourService, params: [String : Any], socket: GCDAsyncSocket, context: String) {
+    func service(_ service: BonjourService, onCall function: String, params: [String : Any], socket: GCDAsyncSocket, context: String) {
         print("onFuntion", function, params)
         switch(function) {
         case "foo":
@@ -33,5 +21,17 @@ class SampleHTTPServer : NSObject, BonjourServiceDelegate {
         default:
             print("error")
         }
+    }
+    
+    func service(_ service: BonjourService, onRequest request: BonjourRequest, socket: GCDAsyncSocket) {
+        var res = BonjourResponce()
+        switch(request.path) {
+        case "/":
+            res.setBody(string: "<html><body>Hello World!</body></html>")
+        default:
+            res.setBody(string: "<html><body>Page Not Found</body></html>")
+            res.statusText = "404 Not Found"
+        }
+        service.send(responce: res, to: socket)
     }
 }

@@ -11,7 +11,7 @@ import CocoaAsyncSocket
 
 protocol BonjourServiceDelegate: NSObjectProtocol {
     func service(_ service: BonjourService, onRequest: BonjourRequest, socket: GCDAsyncSocket)
-    func on(function: String, service: BonjourService, params: [String:Any], socket: GCDAsyncSocket, context: String)
+    func service(_ service: BonjourService, onCall: String, params: [String:Any], socket: GCDAsyncSocket, context: String)
 }
 
 @objc class BonjourService : NSObject, ObservableObject {
@@ -106,7 +106,7 @@ extension BonjourService : GCDAsyncSocketDelegate {
             if components.count == 4, components[0] == "" && components[1] == "api" {
                 print("API call", components[2], components[3])
                 let json = req.jsonBody ?? [:]
-                delegate.on(function: components[2], service: self, params: json, socket: sock, context: components[3])
+                delegate.service(self, onCall: components[2], params: json, socket: sock, context: components[3])
                 return
             }
 
