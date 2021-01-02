@@ -47,6 +47,13 @@ struct BonjourResponce {
         }
     }
 
+    var jsonBody:[String:Any]? {
+        guard let body = body, headers["Content-Type"] == "application/json" else {
+            return nil
+        }
+        return try? JSONSerialization.jsonObject(with: body, options: []) as? [String:Any]
+    }
+
     var headerData: Data {
         let headersSection = headers.map {
             "\($0):\($1)"

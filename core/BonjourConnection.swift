@@ -57,7 +57,6 @@ class BonjourConnection: NSObject, ObservableObject {
     func call(name: String, params: [String:Any], callback: @escaping CompletionHandler) {
         let uuid = UUID().uuidString
         callbacks[uuid] = callback
-        print("http-calling \(name) with \(uuid)")
         var req = BonjourRequest(path: "/api/\(name)/\(uuid)")
         req.setBody(json: params)
         send(req: req)
@@ -102,10 +101,8 @@ extension BonjourConnection : GCDAsyncSocketDelegate {
         }
         buffer = nil
         if let context = res.headers["X-Context"] {
-            print("context", context)
             if let callback = callbacks[context] {
-                print("called back")
-                callback(res, [:])
+                callback(res, res.jsonBody)
                 callbacks.removeValue(forKey: context)
                 return
             }
