@@ -54,6 +54,7 @@ class BonjourConnection: NSObject, ObservableObject {
     
     func call(name: String, params: [String:Any]) {
         let uuid = UUID().uuidString
+        print("http-calling \(name) with \(uuid)")
         var req = BonjourRequest(path: "/api/\(name)/\(uuid)")
         req.setBody(json: params)
         send(req: req)
@@ -97,6 +98,10 @@ extension BonjourConnection : GCDAsyncSocketDelegate {
             return
         }
         buffer = nil
+        if let context = res.headers["X-Context"] {
+            print("context", context)
+        }
+        
         delegate?.on(responce: res, connection: self)
     }
     
