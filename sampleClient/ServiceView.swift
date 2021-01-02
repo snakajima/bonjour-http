@@ -64,10 +64,17 @@ struct ServiceView: View {
                     ]
                 ]
                 connection.call(name: "foo", params: json) { (res, json) in
-                    print("foo callback", json ?? "N/A")
+                    print("foo callback", json ?? "N/A", res.statusText)
                 }
             }, label: {
                 Text("HTTP Call")
+            })
+            Button(action: {
+                connection.call(name: "bad", params: [:]) { (res, json) in
+                    print("foo callback", json ?? "N/A", res.statusText)
+                }
+            }, label: {
+                Text("Bad HTTP Call")
             })
         }
         .onAppear() {

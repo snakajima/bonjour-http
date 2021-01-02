@@ -10,16 +10,11 @@ import CocoaAsyncSocket
 
 class SampleHTTPServer : NSObject, BonjourServiceDelegate {
     func service(_ service: BonjourService, onCall function: String, params: [String : Any], socket: GCDAsyncSocket, context: String) {
-        print("onFuntion", function, params)
         switch(function) {
         case "foo":
-            print("foo")
-            let json = [
-                "result": "How are you!"
-            ]
-            service.respond(to: socket, context: context, result: json)
+            service.respond(to: socket, context: context, result: ["result": "How are you?"])
         default:
-            print("error")
+            service.respond(to: socket, context: context, result: ["error": "invalid function name"], statusText: "404 Not found")
         }
     }
     
