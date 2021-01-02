@@ -9,6 +9,10 @@ import Foundation
 import CocoaAsyncSocket
 
 class SampleHTTPServer : NSObject, BonjourServiceDelegate {
+    func on(function: String, service: BonjourService, params: [String : Any], socket: GCDAsyncSocket, context: String) {
+        print("onFuntion", function, params)
+    }
+    
     func on(reqeust: BonjourRequest, service: BonjourService, socket: GCDAsyncSocket) {
         var res = BonjourResponce()
         switch(reqeust.path) {
