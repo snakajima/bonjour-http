@@ -63,7 +63,9 @@ struct ServiceView: View {
                         "bar": [1, 2, 3]
                     ]
                 ]
-                connection.call(name: "foo", params: json)
+                connection.call(name: "foo", params: json) { (res, json) in
+                    print("foo callback", json ?? "N/A")
+                }
             }, label: {
                 Text("HTTP Call")
             })

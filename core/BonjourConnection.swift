@@ -18,6 +18,8 @@ class BonjourConnection: NSObject, ObservableObject {
     private let service: NetService
     private var socket: GCDAsyncSocket? = nil
     private var buffer: Data? = nil
+    typealias CompletionHandler = (BonjourResponce, [String:Any]?)->()
+    private var callbacks = [String:CompletionHandler]()
     
     init(_ service: NetService) {
         self.service = service
@@ -52,8 +54,9 @@ class BonjourConnection: NSObject, ObservableObject {
         }
     }
     
-    func call(name: String, params: [String:Any]) {
+    func call(name: String, params: [String:Any], callback: @escaping CompletionHandler) {
         let uuid = UUID().uuidString
+        callbacks[uuid] = callback
         print("http-calling \(name) with \(uuid)")
         var req = BonjourRequest(path: "/api/\(name)/\(uuid)")
         req.setBody(json: params)
@@ -100,6 +103,12 @@ extension BonjourConnection : GCDAsyncSocketDelegate {
         buffer = nil
         if let context = res.headers["X-Context"] {
             print("context", context)
+            if let callback = callbacks[context] {
+                print("called back")
+                callback(res, [:])
+                callbacks.removeValue(forKey: context)
+                return
+            }
         }
         
         delegate?.on(responce: res, connection: self)
