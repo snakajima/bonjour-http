@@ -1,6 +1,36 @@
 # bonjour-http
 
 This library makes it easy to use Bonjour connections among Apple devices (Mac, iPhone, iPad and Apple TV) and use HTTP as the Application layer protocol. 
+It also has a http-call wrappter, which allows the client to call a specific function on the server side and receives the result asynchronously.
+
+```
+// Client-side
+let json = [
+    "message": "Hello World"
+]
+connection.call(name: "greeting", params: json) { (res, json) in
+    if let json = json {
+        print("Responce from server", json)
+    }
+}
+```
+```
+// Server-side
+class SampleHTTPServer : NSObject, BonjourServiceDelegate {
+    func service(_ service: BonjourService, onCall function: String, params: [String : Any], socket: GCDAsyncSocket, context: String) {
+        switch(function) {
+        case "greeting":
+            let json = [
+                "result": "How are you?"
+            ]
+            service.respond(to: socket, context: context, result: json)
+        default:
+            print("error")
+        }
+    }
+    ...
+}
+```
 
 ## Why HTTP?
 
