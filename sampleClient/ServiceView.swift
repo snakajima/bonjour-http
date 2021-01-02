@@ -32,7 +32,14 @@ struct ServiceView: View {
                 let req = BonjourRequest(path: "/foo")
                 connection.send(req: req)
             }, label: {
-                Text("Hello")
+                Text("Get")
+            })
+            Button(action: {
+                var req = BonjourRequest(path: "/bar", method: "POST")
+                req.setBody(string: "Hello World")
+                connection.send(req: req)
+            }, label: {
+                Text("Post")
             })
         }
         .onAppear() {
