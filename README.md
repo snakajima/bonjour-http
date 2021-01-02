@@ -9,7 +9,7 @@ It also has an http-call wrapper, which allows the client to call a specific fun
 let json = [
     "message": "Hello World"
 ]
-connection.call(name: "greeting", params: json) { (res, json) in
+connection.call("greeting", params: json) { (res, json) in
     if let res.isSuccess {
         print("Response from server", json)
     }

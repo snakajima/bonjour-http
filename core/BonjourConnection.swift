@@ -54,7 +54,7 @@ class BonjourConnection: NSObject, ObservableObject {
         }
     }
     
-    func call(name: String, params: [String:Any], callback: @escaping CompletionHandler) {
+    func call(_ name: String, params: [String:Any], callback: @escaping CompletionHandler) {
         let uuid = UUID().uuidString
         callbacks[uuid] = callback
         var req = BonjourRequest(path: "/api/\(name)/\(uuid)")
