@@ -36,7 +36,17 @@ struct BonjourResponce {
         headers["Content-Type"] = type
         headers["charset"] = "UTF-8"
     }
-    
+
+    mutating func setBody(json: [String:Any]) {
+        if let data = try? JSONSerialization.data(withJSONObject: json, options: []) {
+            body = data
+            headers["Content-Length"] = String(body!.count)
+            headers["Content-Type"] = "application/json"
+        } else {
+            print("BonjourRequest: setBodyJson failed")
+        }
+    }
+
     var headerData: Data {
         let headersSection = headers.map {
             "\($0):\($1)"

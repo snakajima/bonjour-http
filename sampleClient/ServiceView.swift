@@ -41,6 +41,20 @@ struct ServiceView: View {
             }, label: {
                 Text("Post")
             })
+            Button(action: {
+                var req = BonjourRequest(path: "/json")
+                let json = [
+                    "params": [
+                        "message":"Hello World",
+                        "foo": 10,
+                        "bar": [1, 2, 3]
+                    ]
+                ]
+                req.setBody(json: json)
+                connection.send(req: req)
+            }, label: {
+                Text("Post JSON")
+            })
         }
         .onAppear() {
             self.connection.connect()
