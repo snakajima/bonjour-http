@@ -25,6 +25,7 @@ protocol BonjourServiceDelegate: NSObjectProtocol {
     private var hostSocket = GCDAsyncSocket()
     @Published public var clients = [GCDAsyncSocket]()
     @Published public var isRunning = false
+    private var buffers = [ObjectIdentifier:Data]()
 
     init(type: String, port: UInt16 = 0) {
         self.type = type
@@ -75,13 +76,23 @@ extension BonjourService : GCDAsyncSocketDelegate {
     
     func socket(_ sock: GCDAsyncSocket, didRead data: Data, withTag tag: Int) {
         sock.readData(withTimeout: -1, tag: 3)
-        
         // WARNING: Following code assumes that we receive the HTTP request in one packet.
-        guard let http = BonjourRequest(data: data) else {
-            print("### HTTPParser failed")
+        var buffer: Data
+        if let prev = buffers[sock.id] {
+            buffer = prev
+            buffer.append(data)
+        } else {
+            buffer = data
+        }
+        
+        guard let http = BonjourRequest(data: buffer) else {
+            print("buffering", buffer.count)
+            buffers[sock.id] = buffer
             return
         }
-        print("req:", http)
+        buffers.removeValue(forKey: sock.id)
+        
+        print("req:", http, sock.id)
         if let delegate = self.delegate {
             delegate.on(reqeust: http, service: self, socket: sock)
         }
@@ -96,6 +107,7 @@ extension BonjourService : GCDAsyncSocketDelegate {
     
     func socketDidDisconnect(_ sock: GCDAsyncSocket, withError err: Error?) {
         print("socketDidDisconnect")
+        buffers.removeValue(forKey: sock.id)
         clients = clients.filter { $0 != sock }
     }
 }
