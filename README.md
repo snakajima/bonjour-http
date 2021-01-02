@@ -11,7 +11,7 @@ let json = [
 ]
 connection.call(name: "greeting", params: json) { (res, json) in
     if let json = json {
-        print("Responce from server", json)
+        print("Response from server", json)
     }
 }
 ```
