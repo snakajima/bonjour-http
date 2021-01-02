@@ -64,14 +64,22 @@ struct ServiceView: View {
                     ]
                 ]
                 connection.call(name: "foo", params: json) { (res, json) in
-                    print("foo callback", json ?? "N/A", res.statusText)
+                    if res.isSuccess {
+                        print("foo callback", json, res.statusText, res.status)
+                    } else {
+                        print("foo failed", json, res.statusText, res.status)
+                    }
                 }
             }, label: {
                 Text("HTTP Call")
             })
             Button(action: {
                 connection.call(name: "bad", params: [:]) { (res, json) in
-                    print("foo callback", json ?? "N/A", res.statusText)
+                    if res.isSuccess {
+                        print("bad callback", json, res.statusText, res.status)
+                    } else {
+                        print("bad failed", json, res.statusText, res.status)
+                    }
                 }
             }, label: {
                 Text("Bad HTTP Call")

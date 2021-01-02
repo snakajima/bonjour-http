@@ -10,6 +10,8 @@ import Foundation
 struct BonjourResponce {
     let proto: String
     var statusText = "200 OK"
+    var status:Int { Int(statusText.components(separatedBy: " ").first!) ?? 0 }
+    var isSuccess:Bool { status >= 200 && status < 300 }
     var body: Data? = nil
     var headers = [String:String]()
     

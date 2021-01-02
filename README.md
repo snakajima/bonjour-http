@@ -10,7 +10,7 @@ let json = [
     "message": "Hello World"
 ]
 connection.call(name: "greeting", params: json) { (res, json) in
-    if let json = json {
+    if let res.isSuccess = 200 {
         print("Response from server", json)
     }
 }

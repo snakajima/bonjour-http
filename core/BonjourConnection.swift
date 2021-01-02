@@ -18,7 +18,7 @@ class BonjourConnection: NSObject, ObservableObject {
     private let service: NetService
     private var socket: GCDAsyncSocket? = nil
     private var buffer: Data? = nil
-    typealias CompletionHandler = (BonjourResponce, [String:Any]?)->()
+    typealias CompletionHandler = (BonjourResponce, [String:Any])->()
     private var callbacks = [String:CompletionHandler]()
     
     init(_ service: NetService) {
@@ -102,7 +102,7 @@ extension BonjourConnection : GCDAsyncSocketDelegate {
         buffer = nil
         if let context = res.headers["X-Context"] {
             if let callback = callbacks[context] {
-                callback(res, res.jsonBody)
+                callback(res, res.jsonBody ?? [:])
                 callbacks.removeValue(forKey: context)
                 return
             }
