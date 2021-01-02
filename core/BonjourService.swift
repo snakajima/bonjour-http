@@ -10,7 +10,7 @@ import Foundation
 import CocoaAsyncSocket
 
 protocol BonjourServiceDelegate: NSObjectProtocol {
-    func on(reqeust: BonjourRequest, service: BonjourService, socket: GCDAsyncSocket)
+    func service(_ service: BonjourService, onRequest: BonjourRequest, socket: GCDAsyncSocket)
     func on(function: String, service: BonjourService, params: [String:Any], socket: GCDAsyncSocket, context: String)
 }
 
@@ -110,7 +110,7 @@ extension BonjourService : GCDAsyncSocketDelegate {
                 return
             }
 
-            delegate.on(reqeust: req, service: self, socket: sock)
+            delegate.service(self, onRequest: req, socket: sock)
         }
     }
     
