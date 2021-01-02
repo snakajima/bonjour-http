@@ -1,7 +1,8 @@
 # bonjour-http
 
-This library makes it easy to use Bonjour connections among Apple devices (Mac, iPhone, iPad and Apple TV) and use HTTP as the Application layer protocol. 
-It also has a http-call wrappter, which allows the client to call a specific function on the server side and receives the result asynchronously.
+This library makes it easy to use Bonjour connections among Apple devices (Mac, iPhone, iPad and Apple TV) and use HTTP as the Application layer protocol.
+
+It also has an http-call wrapper, which allows the client to call a specific function on the server side and receive the result asynchronously.
 
 ```
 // Client-side
@@ -25,7 +26,8 @@ class SampleHTTPServer : NSObject, BonjourServiceDelegate {
             ]
             service.respond(to: socket, context: context, result: json)
         default:
-            print("error")
+            // handle error
+            ...
         }
     }
     ...
