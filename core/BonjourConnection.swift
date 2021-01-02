@@ -51,6 +51,13 @@ class BonjourConnection: NSObject, ObservableObject {
             socket?.write(body, withTimeout: -1.0, tag: 3)
         }
     }
+    
+    func call(name: String, params: [String:Any]) {
+        let uuid = UUID().uuidString
+        var req = BonjourRequest(path: "/api/\(name)/\(uuid)")
+        req.setBody(json: params)
+        send(req: req)
+    }
 }
 
 extension BonjourConnection : NetServiceDelegate {

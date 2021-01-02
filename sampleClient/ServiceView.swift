@@ -55,6 +55,18 @@ struct ServiceView: View {
             }, label: {
                 Text("Post JSON")
             })
+            Button(action: {
+                let json = [
+                    "params": [
+                        "message":"Hello World",
+                        "foo": 10,
+                        "bar": [1, 2, 3]
+                    ]
+                ]
+                connection.call(name: "foo", params: json)
+            }, label: {
+                Text("HTTP Call")
+            })
         }
         .onAppear() {
             self.connection.connect()
