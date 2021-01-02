@@ -11,6 +11,12 @@ import CocoaAsyncSocket
 class SampleHTTPServer : NSObject, BonjourServiceDelegate {
     func on(function: String, service: BonjourService, params: [String : Any], socket: GCDAsyncSocket, context: String) {
         print("onFuntion", function, params)
+        switch(function) {
+        case "foo":
+            print("foo")
+        default:
+            print("error")
+        }
     }
     
     func on(reqeust: BonjourRequest, service: BonjourService, socket: GCDAsyncSocket) {
