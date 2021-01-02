@@ -64,6 +64,13 @@ protocol BonjourServiceDelegate: NSObjectProtocol {
             socket.write(body, withTimeout: -1.0, tag: 3)
         }
     }
+    
+    func respond(to socket: GCDAsyncSocket, context: String, result: [String:Any]) {
+        var res = BonjourResponce()
+        res.headers["X-Context"] = context
+        res.setBody(json: result)
+        send(responce: res, to: socket)
+    }
 }
 
 extension BonjourService : GCDAsyncSocketDelegate {

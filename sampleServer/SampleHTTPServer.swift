@@ -14,6 +14,10 @@ class SampleHTTPServer : NSObject, BonjourServiceDelegate {
         switch(function) {
         case "foo":
             print("foo")
+            let json = [
+                "result": "How are you!"
+            ]
+            service.respond(to: socket, context: context, result: json)
         default:
             print("error")
         }
