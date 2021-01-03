@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct BonjourResponce {
+struct BonjourResponse {
     let proto: String
     var statusText = "200 OK"
     var status:Int { Int(statusText.components(separatedBy: " ").first!) ?? 0 }
@@ -66,7 +66,7 @@ struct BonjourResponce {
     }
 }
 
-extension BonjourResponce : CustomStringConvertible {
+extension BonjourResponse : CustomStringConvertible {
     var description: String {
         guard let body = body else {
             return "\(proto) \(statusText)"

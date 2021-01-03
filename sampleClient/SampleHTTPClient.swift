@@ -8,7 +8,7 @@
 import Foundation
 
 class SampleHTTPClient: NSObject, BonjourConnectionDelegate {
-    func on(responce: BonjourResponce, connection: BonjourConnection) {
+    func on(responce: BonjourResponse, connection: BonjourConnection) {
         print("res", responce)
     }
 }

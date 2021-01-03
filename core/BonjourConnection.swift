@@ -9,7 +9,7 @@ import Foundation
 import CocoaAsyncSocket
 
 protocol BonjourConnectionDelegate : NSObjectProtocol {
-    func on(responce: BonjourResponce, connection: BonjourConnection)
+    func on(responce: BonjourResponse, connection: BonjourConnection)
 }
 
 class BonjourConnection: NSObject, ObservableObject {
@@ -18,7 +18,7 @@ class BonjourConnection: NSObject, ObservableObject {
     private let service: NetService
     private var socket: GCDAsyncSocket? = nil
     private var buffer: Data? = nil
-    typealias CompletionHandler = (BonjourResponce, [String:Any])->()
+    typealias CompletionHandler = (BonjourResponse, [String:Any])->()
     private var callbacks = [String:CompletionHandler]()
     
     init(_ service: NetService) {
@@ -95,7 +95,7 @@ extension BonjourConnection : GCDAsyncSocketDelegate {
         } else {
             buffer = data
         }
-        guard let res = BonjourResponce(data: buffer!) else {
+        guard let res = BonjourResponse(data: buffer!) else {
             print("buffering", buffer!.count)
             return
         }

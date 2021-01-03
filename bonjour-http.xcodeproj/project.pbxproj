@@ -24,8 +24,8 @@
 		74477EEE2599977300C73577 /* BonjourRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74477EED2599977300C73577 /* BonjourRequest.swift */; };
 		74477EEF2599977300C73577 /* BonjourRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74477EED2599977300C73577 /* BonjourRequest.swift */; };
 		74477EFB2599AAB400C73577 /* SampleHTTPServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74477EFA2599AAB400C73577 /* SampleHTTPServer.swift */; };
-		74477F072599B40E00C73577 /* BonjourResponce.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74477F062599B40E00C73577 /* BonjourResponce.swift */; };
-		74477F0A2599B6ED00C73577 /* BonjourResponce.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74477F062599B40E00C73577 /* BonjourResponce.swift */; };
+		74477F072599B40E00C73577 /* BonjourResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74477F062599B40E00C73577 /* BonjourResponse.swift */; };
+		74477F0A2599B6ED00C73577 /* BonjourResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74477F062599B40E00C73577 /* BonjourResponse.swift */; };
 		74477F18259A2CA800C73577 /* BonjourParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74477F17259A2CA800C73577 /* BonjourParser.swift */; };
 		74477F19259A2CA800C73577 /* BonjourParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74477F17259A2CA800C73577 /* BonjourParser.swift */; };
 		74477F1F259A45A700C73577 /* bonjour-http.podspec in Resources */ = {isa = PBXBuildFile; fileRef = 74477F1E259A45A700C73577 /* bonjour-http.podspec */; };
@@ -62,7 +62,7 @@
 		74477EE125992F7F00C73577 /* BonjourService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BonjourService.swift; sourceTree = "<group>"; };
 		74477EED2599977300C73577 /* BonjourRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BonjourRequest.swift; sourceTree = "<group>"; };
 		74477EFA2599AAB400C73577 /* SampleHTTPServer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleHTTPServer.swift; sourceTree = "<group>"; };
-		74477F062599B40E00C73577 /* BonjourResponce.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BonjourResponce.swift; sourceTree = "<group>"; };
+		74477F062599B40E00C73577 /* BonjourResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BonjourResponse.swift; sourceTree = "<group>"; };
 		74477F17259A2CA800C73577 /* BonjourParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BonjourParser.swift; sourceTree = "<group>"; };
 		74477F1E259A45A700C73577 /* bonjour-http.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "bonjour-http.podspec"; sourceTree = "<group>"; };
 		74477F23259A479800C73577 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
@@ -160,7 +160,7 @@
 				74477EE125992F7F00C73577 /* BonjourService.swift */,
 				74477F17259A2CA800C73577 /* BonjourParser.swift */,
 				74477EED2599977300C73577 /* BonjourRequest.swift */,
-				74477F062599B40E00C73577 /* BonjourResponce.swift */,
+				74477F062599B40E00C73577 /* BonjourResponse.swift */,
 			);
 			path = core;
 			sourceTree = "<group>";
@@ -392,7 +392,7 @@
 				74477EC82599218700C73577 /* ServiceView.swift in Sources */,
 				74477F18259A2CA800C73577 /* BonjourParser.swift in Sources */,
 				74477EEE2599977300C73577 /* BonjourRequest.swift in Sources */,
-				74477F0A2599B6ED00C73577 /* BonjourResponce.swift in Sources */,
+				74477F0A2599B6ED00C73577 /* BonjourResponse.swift in Sources */,
 				74477EC525991DEF00C73577 /* BonjourConnection.swift in Sources */,
 				74477EB025991D0800C73577 /* ContentView.swift in Sources */,
 				74477EAE25991D0800C73577 /* sampleClientApp.swift in Sources */,
@@ -409,7 +409,7 @@
 				74477F19259A2CA800C73577 /* BonjourParser.swift in Sources */,
 				74477EFB2599AAB400C73577 /* SampleHTTPServer.swift in Sources */,
 				74477EE225992F7F00C73577 /* BonjourService.swift in Sources */,
-				74477F072599B40E00C73577 /* BonjourResponce.swift in Sources */,
+				74477F072599B40E00C73577 /* BonjourResponse.swift in Sources */,
 				74477ED225992F5500C73577 /* sampleServerApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
