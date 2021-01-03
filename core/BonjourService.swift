@@ -17,7 +17,7 @@ protocol BonjourServiceDelegate: NSObjectProtocol {
 }
 
 extension GCDAsyncSocket {
-    var uuid:UUID { userData as! UUID }
+    var uuid:UUID? { userData as? UUID }
 }
 
 @objc class BonjourService : NSObject, ObservableObject {
@@ -99,9 +99,13 @@ extension BonjourService : GCDAsyncSocketDelegate {
     
     func socket(_ sock: GCDAsyncSocket, didRead data: Data, withTag tag: Int) {
         sock.readData(withTimeout: -1, tag: 3)
-        // WARNING: Following code assumes that we receive the HTTP request in one packet.
+        
+        guard let uuidSock = sock.uuid else {
+            return
+        }
+        
         var buffer: Data
-        if let prev = buffers[sock.uuid] {
+        if let prev = buffers[uuidSock] {
             buffer = prev
             buffer.append(data)
         } else {
@@ -110,12 +114,12 @@ extension BonjourService : GCDAsyncSocketDelegate {
         
         guard let req = BonjourRequest(data: buffer) else {
             print("buffering", buffer.count)
-            buffers[sock.uuid] = buffer
+            buffers[uuidSock] = buffer
             return
         }
-        buffers.removeValue(forKey: sock.uuid)
+        buffers.removeValue(forKey: uuidSock)
         
-        print("req:", req, sock.uuid)
+        print("req:", req, uuidSock)
         if let delegate = self.delegate {
             let components = req.path.components(separatedBy: "/")
             if components.count == 4, components[0] == "" && components[1] == "api" {
@@ -138,7 +142,9 @@ extension BonjourService : GCDAsyncSocketDelegate {
     
     func socketDidDisconnect(_ sock: GCDAsyncSocket, withError err: Error?) {
         print("socketDidDisconnect")
-        buffers.removeValue(forKey: sock.uuid)
+        if let uuid = sock.uuid { // dealing with the its own socket
+            buffers.removeValue(forKey: uuid)
+        }
         clients = clients.filter { $0 != sock }
     }
 }
