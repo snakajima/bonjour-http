@@ -8,11 +8,11 @@
 import Foundation
 import CocoaAsyncSocket
 
-protocol BonjourConnectionDelegate : NSObjectProtocol {
+public protocol BonjourConnectionDelegate : NSObjectProtocol {
     func on(responce: BonjourResponse, connection: BonjourConnection)
 }
 
-class BonjourConnection: NSObject, ObservableObject {
+public class BonjourConnection: NSObject, ObservableObject {
     @Published var isConnected = false
     public weak var delegate: BonjourConnectionDelegate?
     private let service: NetService
@@ -64,31 +64,31 @@ class BonjourConnection: NSObject, ObservableObject {
 }
 
 extension BonjourConnection : NetServiceDelegate {
-    func netServiceDidResolveAddress(_ sender: NetService) {
+    public func netServiceDidResolveAddress(_ sender: NetService) {
         print("netServiceDidResolveAddress", sender.addresses!)
         connect()
     }
     
-    func netService(_ sender: NetService, didNotPublish errorDict: [String : NSNumber]) {
+    public func netService(_ sender: NetService, didNotPublish errorDict: [String : NSNumber]) {
         print("netService:errorDict", errorDict)
     }
     
 }
 
 extension BonjourConnection : GCDAsyncSocketDelegate {
-    func socket(_ sock: GCDAsyncSocket, didConnectToHost host: String, port: UInt16) {
+    public func socket(_ sock: GCDAsyncSocket, didConnectToHost host: String, port: UInt16) {
         print("socket:didConnectToHost")
         isConnected = true
         sock.readData(withTimeout: -1, tag: 3)
     }
     
-    func socketDidDisconnect(_ sock: GCDAsyncSocket, withError err: Error?) {
+    public func socketDidDisconnect(_ sock: GCDAsyncSocket, withError err: Error?) {
         print("socket:didDisconnect")
         socket = nil
         isConnected = false
     }
     
-    func socket(_ sock: GCDAsyncSocket, didRead data: Data, withTag tag: Int) {
+    public func socket(_ sock: GCDAsyncSocket, didRead data: Data, withTag tag: Int) {
         sock.readData(withTimeout: -1, tag: 3)
         if let _ = self.buffer {
             buffer!.append(data)
@@ -111,7 +111,7 @@ extension BonjourConnection : GCDAsyncSocketDelegate {
         delegate?.on(responce: res, connection: self)
     }
     
-    func socket(_ sock: GCDAsyncSocket, didWriteDataWithTag tag: Int) {
+    public func socket(_ sock: GCDAsyncSocket, didWriteDataWithTag tag: Int) {
         // print("socket:didWriteDataWithTag")
     }
 }

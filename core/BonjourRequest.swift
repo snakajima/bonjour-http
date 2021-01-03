@@ -8,7 +8,7 @@
 import Foundation
 import CocoaAsyncSocket
 
-struct BonjourRequest {
+public struct BonjourRequest {
     let method: String
     let path: String
     let proto: String
@@ -73,7 +73,7 @@ struct BonjourRequest {
 }
 
 extension BonjourRequest : CustomStringConvertible {
-    var description: String {
+    public var description: String {
         guard let body = body else {
             return "\(method) \(path) \(proto)"
         }
