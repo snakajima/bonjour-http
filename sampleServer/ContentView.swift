@@ -23,7 +23,7 @@ struct ContentView: View {
                     Text("Client")
                 }
             }
-            if service.isRunning {
+            if myServer.isRunning {
                 Button(action: {
                     service.stop()
                 }, label: {

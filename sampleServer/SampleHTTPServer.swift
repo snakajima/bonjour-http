@@ -10,11 +10,16 @@ import CocoaAsyncSocket
 
 class SampleHTTPServer : NSObject, BonjourServiceDelegate, ObservableObject {
     @Published public var clients = [GCDAsyncSocket]()
+    @Published public var isRunning = false
     
-    func serviceClientDidChange(_ service: BonjourService) {
+    func serviceClientsDidChange(_ service: BonjourService) {
         clients = service.clients
     }
-    
+
+    func serviceRunningStateDidChange(_ service: BonjourService) {
+        isRunning = service.isRunning
+    }    
+
     func service(_ service: BonjourService, onCall function: String, params: [String : Any], socket: GCDAsyncSocket, context: String) {
         switch(function) {
         case "foo":

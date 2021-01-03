@@ -10,7 +10,8 @@ import Foundation
 import CocoaAsyncSocket
 
 protocol BonjourServiceDelegate: NSObjectProtocol {
-    func serviceClientDidChange(_ service: BonjourService)
+    func serviceRunningStateDidChange(_ service: BonjourService)
+    func serviceClientsDidChange(_ service: BonjourService)
     func service(_ service: BonjourService, onRequest: BonjourRequest, socket: GCDAsyncSocket)
     func service(_ service: BonjourService, onCall: String, params: [String:Any], socket: GCDAsyncSocket, context: String)
 }
@@ -26,12 +27,13 @@ extension GCDAsyncSocket {
     private var service:NetService? {
         didSet {
             isRunning = service != nil
+            delegate?.serviceRunningStateDidChange(self)
         }
     }
     private var hostSocket = GCDAsyncSocket()
     public var clients = [GCDAsyncSocket]() {
         didSet {
-            delegate?.serviceClientDidChange(self)
+            delegate?.serviceClientsDidChange(self)
         }
     }
     @Published public var isRunning = false
