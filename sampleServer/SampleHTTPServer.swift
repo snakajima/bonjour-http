@@ -8,7 +8,13 @@
 import Foundation
 import CocoaAsyncSocket
 
-class SampleHTTPServer : NSObject, BonjourServiceDelegate {
+class SampleHTTPServer : NSObject, BonjourServiceDelegate, ObservableObject {
+    @Published public var clients = [GCDAsyncSocket]()
+    
+    func serviceClientDidChange(_ service: BonjourService) {
+        clients = service.clients
+    }
+    
     func service(_ service: BonjourService, onCall function: String, params: [String : Any], socket: GCDAsyncSocket, context: String) {
         switch(function) {
         case "foo":

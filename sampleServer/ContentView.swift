@@ -12,14 +12,14 @@ extension GCDAsyncSocket : Identifiable {
 }
 
 struct ContentView: View {
-    let myServer = SampleHTTPServer()
+    @ObservedObject var myServer = SampleHTTPServer()
     @ObservedObject var service = BonjourService(type:"_samplehttp._tcp", port:8001)
     var body: some View {
         VStack {
             Text("Hello, world!")
                 .padding()
             List {
-                ForEach(service.clients) { socket in
+                ForEach(myServer.clients) { socket in
                     Text("Client")
                 }
             }
