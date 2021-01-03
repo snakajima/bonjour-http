@@ -39,7 +39,7 @@ extension GCDAsyncSocket {
     public var isRunning = false
     private var buffers = [UUID:Data]()
 
-    init(type: String, port: UInt16 = 0) {
+    @objc init(type: String, port: UInt16 = 0) {
         self.type = type
         self.port = port
     }
