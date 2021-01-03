@@ -20,7 +20,7 @@ extension GCDAsyncSocket {
     var uuid:UUID? { userData as? UUID }
 }
 
-@objc class BonjourService : NSObject, ObservableObject {
+@objc class BonjourService : NSObject {
     let type: String
     let port: UInt16
     weak var delegate:BonjourServiceDelegate?
@@ -36,7 +36,7 @@ extension GCDAsyncSocket {
             delegate?.serviceClientsDidChange(self)
         }
     }
-    @Published public var isRunning = false
+    public var isRunning = false
     private var buffers = [UUID:Data]()
 
     init(type: String, port: UInt16 = 0) {
