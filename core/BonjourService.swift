@@ -69,7 +69,7 @@ extension GCDAsyncSocket {
         }
     }
     
-    func send(responce: BonjourResponce, to socket: GCDAsyncSocket) {
+    func send(responce: BonjourResponse, to socket: GCDAsyncSocket) {
         socket.write(responce.headerData, withTimeout: -1.0, tag: 3)
         if let body = responce.body {
             socket.write(body, withTimeout: -1.0, tag: 3)
@@ -77,7 +77,7 @@ extension GCDAsyncSocket {
     }
     
     func respond(to socket: GCDAsyncSocket, context: String, result: [String:Any], statusText: String? = nil) {
-        var res = BonjourResponce()
+        var res = BonjourResponse()
         res.headers["X-Context"] = context
         res.setBody(json: result)
         if let statusText = statusText {
