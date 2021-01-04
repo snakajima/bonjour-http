@@ -10,7 +10,7 @@ import Foundation
 extension NetService : Identifiable {
 }
 
-class BonjourBrowser: NSObject, ObservableObject {
+public class BonjourBrowser: NSObject, ObservableObject {
     let type: String
     private var serviceBrowser = NetServiceBrowser()
     @Published var services = [NetService]()
@@ -28,21 +28,21 @@ class BonjourBrowser: NSObject, ObservableObject {
 }
 
 extension BonjourBrowser : NetServiceBrowserDelegate {
-    func netServiceBrowser(_ browser: NetServiceBrowser, didFind service: NetService, moreComing: Bool) {
+    public func netServiceBrowser(_ browser: NetServiceBrowser, didFind service: NetService, moreComing: Bool) {
         print("netServiceBrowser:didFind", service)
         services.append(service)
     }
     
-    func netServiceBrowser(_ browser: NetServiceBrowser, didRemove service: NetService, moreComing: Bool) {
+    public func netServiceBrowser(_ browser: NetServiceBrowser, didRemove service: NetService, moreComing: Bool) {
         services = services.filter { $0 != service }
         print("netServiceBroser:didRemove", service, services.count)
     }
     
-    func netServiceBrowserDidStopSearch(_ browser: NetServiceBrowser) {
+    public func netServiceBrowserDidStopSearch(_ browser: NetServiceBrowser) {
         print("netServiceBrowserDidStopSearch")
     }
     
-    func netServiceBrowser(_ browser: NetServiceBrowser, didNotSearch errorDict: [String : NSNumber]) {
+    public func netServiceBrowser(_ browser: NetServiceBrowser, didNotSearch errorDict: [String : NSNumber]) {
         print("netServiceBrowser:didNotSearch", errorDict)
     }
 }
