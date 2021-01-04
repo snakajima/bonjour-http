@@ -9,13 +9,13 @@ import Foundation
 
 public struct BonjourResponse {
     let proto: String
-    var statusText = "200 OK"
-    var status:Int { Int(statusText.components(separatedBy: " ").first!) ?? 0 }
-    var isSuccess:Bool { status >= 200 && status < 300 }
-    var body: Data? = nil
-    var headers = [String:String]()
+    public var statusText = "200 OK"
+    public var status:Int { Int(statusText.components(separatedBy: " ").first!) ?? 0 }
+    public var isSuccess:Bool { status >= 200 && status < 300 }
+    public var body: Data? = nil
+    public var headers = [String:String]()
     
-    init() {
+    public init() {
         proto = "HTTP/1.1"
     }
 
@@ -32,14 +32,14 @@ public struct BonjourResponse {
         }
     }
 
-    mutating func setBody(string: String, type: String="text/html") {
+    public mutating func setBody(string: String, type: String="text/html") {
         body = Data(string.utf8)
         headers["Content-Length"] = String(body!.count)
         headers["Content-Type"] = type
         headers["charset"] = "UTF-8"
     }
 
-    mutating func setBody(json: [String:Any]) {
+    public mutating func setBody(json: [String:Any]) {
         if let data = try? JSONSerialization.data(withJSONObject: json, options: []) {
             body = data
             headers["Content-Length"] = String(body!.count)
@@ -49,14 +49,14 @@ public struct BonjourResponse {
         }
     }
 
-    var jsonBody:[String:Any]? {
+    public var jsonBody:[String:Any]? {
         guard let body = body, headers["Content-Type"] == "application/json" else {
             return nil
         }
         return try? JSONSerialization.jsonObject(with: body, options: []) as? [String:Any]
     }
 
-    var headerData: Data {
+    public var headerData: Data {
         let headersSection = headers.map {
             "\($0):\($1)"
         }.joined(separator: "\r\n")

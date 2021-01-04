@@ -23,7 +23,7 @@ extension GCDAsyncSocket {
 @objc public class BonjourService : NSObject {
     let type: String
     let port: UInt16
-    weak var delegate:BonjourServiceDelegate?
+    public weak var delegate:BonjourServiceDelegate?
     private var service:NetService? {
         didSet {
             isRunning = service != nil
@@ -39,12 +39,12 @@ extension GCDAsyncSocket {
     public var isRunning = false
     private var buffers = [UUID:Data]()
 
-    @objc init(type: String, port: UInt16 = 0) {
+    @objc public init(type: String, port: UInt16 = 0) {
         self.type = type
         self.port = port
     }
     
-    func start() {
+    public func start() {
         hostSocket = GCDAsyncSocket(delegate: self, delegateQueue: .main)
         do {
             try hostSocket.accept(onPort: port)
@@ -57,7 +57,7 @@ extension GCDAsyncSocket {
         }
     }
     
-    func stop() {
+    public func stop() {
         if let service = self.service {
             clients.forEach { (socket) in
                 socket.disconnect()
@@ -69,14 +69,14 @@ extension GCDAsyncSocket {
         }
     }
     
-    func send(responce: BonjourResponse, to socket: GCDAsyncSocket) {
+    public func send(responce: BonjourResponse, to socket: GCDAsyncSocket) {
         socket.write(responce.headerData, withTimeout: -1.0, tag: 3)
         if let body = responce.body {
             socket.write(body, withTimeout: -1.0, tag: 3)
         }
     }
     
-    func respond(to socket: GCDAsyncSocket, context: String, result: [String:Any], statusText: String? = nil) {
+    public func respond(to socket: GCDAsyncSocket, context: String, result: [String:Any], statusText: String? = nil) {
         var res = BonjourResponse()
         res.headers["X-Context"] = context
         res.setBody(json: result)

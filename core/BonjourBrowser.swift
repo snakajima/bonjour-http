@@ -15,11 +15,11 @@ class BonjourBrowser: NSObject, ObservableObject {
     private var serviceBrowser = NetServiceBrowser()
     @Published var services = [NetService]()
     
-    init(_ type: String) {
+    public init(_ type: String) {
         self.type = type
     }
 
-    func start() {
+    public func start() {
         services.removeAll()
         serviceBrowser.delegate = self
         serviceBrowser.schedule(in: .main, forMode: .common)

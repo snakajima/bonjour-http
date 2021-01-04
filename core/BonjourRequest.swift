@@ -12,8 +12,8 @@ public struct BonjourRequest {
     let method: String
     let path: String
     let proto: String
-    var headers: [String:String]
-    var body: Data?
+    public var headers: [String:String]
+    public var body: Data?
     var headerData: Data {
         let headersSection = headers.map {
             "\($0):\($1)"
@@ -21,21 +21,21 @@ public struct BonjourRequest {
         return Data("\(method) \(path) \(proto)\r\n\(headersSection)\r\n\r\n".utf8)
     }
 
-    init(path: String, method: String = "GET") {
+    public init(path: String, method: String = "GET") {
         self.path = path
         self.method = method
         self.proto = "HTTP/1.1"
         self.headers = ["User-Agent":"bonjour-http", "Accept":"*/*"]
     }
 
-    mutating func setBody(string: String, type: String="text/html") {
+    public mutating func setBody(string: String, type: String="text/html") {
         body = Data(string.utf8)
         headers["Content-Length"] = String(body!.count)
         headers["Content-Type"] = type
         headers["charset"] = "UTF-8"
     }
 
-    mutating func setBody(json: [String:Any]) {
+    public mutating func setBody(json: [String:Any]) {
         if let data = try? JSONSerialization.data(withJSONObject: json, options: []) {
             body = data
             headers["Content-Length"] = String(body!.count)
@@ -45,7 +45,7 @@ public struct BonjourRequest {
         }
     }
     
-    var jsonBody:[String:Any]? {
+    public var jsonBody:[String:Any]? {
         guard let body = body, headers["Content-Type"] == "application/json" else {
             return nil
         }

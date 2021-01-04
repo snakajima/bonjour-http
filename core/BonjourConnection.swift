@@ -13,21 +13,21 @@ public protocol BonjourConnectionDelegate : NSObjectProtocol {
 }
 
 public class BonjourConnection: NSObject, ObservableObject {
-    @Published var isConnected = false
+    @Published public var isConnected = false
     public weak var delegate: BonjourConnectionDelegate?
     private let service: NetService
     private var socket: GCDAsyncSocket? = nil
     private var buffer: Data? = nil
-    typealias CompletionHandler = (BonjourResponse, [String:Any])->()
+    public typealias CompletionHandler = (BonjourResponse, [String:Any])->()
     private var callbacks = [String:CompletionHandler]()
     
-    init(_ service: NetService) {
+    public init(_ service: NetService) {
         self.service = service
         super.init()
         service.delegate = self
     }
     
-    func connect() {
+    public func connect() {
         if service.addresses?.count ?? 0 == 0 {
             service.resolve(withTimeout: 30.0)
             return
@@ -41,20 +41,20 @@ public class BonjourConnection: NSObject, ObservableObject {
         })
     }
     
-    func disconnect() {
+    public func disconnect() {
         if let socket = self.socket {
             socket.disconnect()
         }
     }
     
-    func send(req: BonjourRequest) {
+    public func send(req: BonjourRequest) {
         socket?.write(req.headerData, withTimeout: -1.0, tag: 3)
         if let body = req.body {
             socket?.write(body, withTimeout: -1.0, tag: 3)
         }
     }
     
-    func call(_ name: String, params: [String:Any], callback: @escaping CompletionHandler) {
+    public func call(_ name: String, params: [String:Any], callback: @escaping CompletionHandler) {
         let uuid = UUID().uuidString
         callbacks[uuid] = callback
         var req = BonjourRequest(path: "/api/\(name)/\(uuid)")
