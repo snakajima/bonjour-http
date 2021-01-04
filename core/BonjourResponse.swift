@@ -21,12 +21,12 @@ public struct BonjourResponse {
 
     init?(data: Data) {
         do {
-            let (firstLine, headers, body) = try BonjourParser.parseHeader(data: data)
-            var parts = firstLine.components(separatedBy: " ")
+            let result = try BonjourParser.parseHeader(data: data)
+            var parts = result.firstLine.components(separatedBy: " ")
             proto = parts.removeFirst()
             statusText = parts.joined(separator: " ")
-            self.body = body
-            self.headers = headers
+            self.body = result.body
+            self.headers = result.headers
         } catch {
             return nil
         }
