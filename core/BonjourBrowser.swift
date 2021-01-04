@@ -13,7 +13,7 @@ extension NetService : Identifiable {
 public class BonjourBrowser: NSObject, ObservableObject {
     let type: String
     private var serviceBrowser = NetServiceBrowser()
-    @Published var services = [NetService]()
+    @Published public var services = [NetService]()
     
     public init(_ type: String) {
         self.type = type
