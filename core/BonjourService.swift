@@ -98,6 +98,9 @@ extension BonjourService : GCDAsyncSocketDelegate {
     }
     
     public func socket(_ sock: GCDAsyncSocket, didRead data: Data, withTag tag: Int) {
+        //let string = String(decoding: data, as: UTF8.self)
+        //print(string)
+        
         sock.readData(withTimeout: -1, tag: 3)
         guard let uuidSock = sock.uuid else {
             return
@@ -106,6 +109,7 @@ extension BonjourService : GCDAsyncSocketDelegate {
         if let prev = buffers[uuidSock] {
             buffer = prev
             buffer.append(data)
+            buffers.removeValue(forKey: uuidSock)
         } else {
             buffer = data
         }
@@ -122,7 +126,6 @@ extension BonjourService : GCDAsyncSocketDelegate {
                 print("extra body", extra.count)
                 extraBody = extra
             }
-            buffers.removeValue(forKey: uuidSock)
 
             print("req:", req, uuidSock)
             if let delegate = self.delegate {

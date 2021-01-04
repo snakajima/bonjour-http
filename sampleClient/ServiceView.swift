@@ -81,14 +81,14 @@ struct ServiceView: View {
                         "bar": [1, 2, 3]
                     ]
                 ]
-                connection.call("foo", params: [:]) { (_, _) in }
-                connection.call("foo", params: [:]) { (_, _) in }
-                connection.call("foo", params: [:]) { (_, _) in }
-                connection.call("foo", params: [:]) { (_, _) in }
-                connection.call("foo", params: json) { (_, _) in }
-                connection.call("foo", params: json) { (_, _) in }
-                connection.call("foo", params: json) { (_, _) in }
-                connection.call("foo", params: json) { (_, _) in }
+                connection.call("foo", params: [:]) { (res, _) in print( res.isSuccess ) }
+                connection.call("foo", params: [:]) { (res, _) in print( res.isSuccess ) }
+                connection.call("foo", params: [:]) { (res, _) in print( res.isSuccess ) }
+                connection.call("foo", params: [:]) { (res, _) in print( res.isSuccess ) }
+                connection.call("foo", params: json) { (res, _) in print( res.isSuccess ) }
+                connection.call("foo", params: json) { (res, _) in print( res.isSuccess ) }
+                connection.call("foo", params: json) { (res, _) in print( res.isSuccess ) }
+                connection.call("foo", params: json) { (res, _) in print( res.isSuccess ) }
             }, label: {
                 Text("HTTP Calls")
             })
