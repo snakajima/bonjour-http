@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'bonjour-http'
-  s.version          = '0.4.4'
+  s.version          = '0.4.5'
   s.summary          = 'HTTP over Bonjour in Swift.'
  
   s.description      = <<-DESC

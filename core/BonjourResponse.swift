@@ -8,7 +8,7 @@
 import Foundation
 
 public struct BonjourResponse {
-    let proto: String
+    public let proto: String
     public var statusText = "200 OK"
     public var status:Int { Int(statusText.components(separatedBy: " ").first!) ?? 0 }
     public var isSuccess:Bool { status >= 200 && status < 300 }

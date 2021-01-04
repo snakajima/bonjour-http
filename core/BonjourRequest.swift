@@ -9,9 +9,9 @@ import Foundation
 import CocoaAsyncSocket
 
 public struct BonjourRequest {
-    let method: String
-    let path: String
-    let proto: String
+    public let method: String
+    public let path: String
+    public let proto: String
     public var headers: [String:String]
     public var body: Data?
     var headerData: Data {
