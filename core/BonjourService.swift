@@ -123,7 +123,7 @@ extension BonjourService : GCDAsyncSocketDelegate {
             let result = try BonjourParser.parseHeader(data: buffer)
             let req = BonjourRequest(result: result)
             if let extra = result.extraBody {
-                print("extra body", extra.count)
+                print("  extra body", extra.count)
                 extraBody = extra
             }
 
@@ -131,7 +131,7 @@ extension BonjourService : GCDAsyncSocketDelegate {
             if let delegate = self.delegate {
                 let components = req.path.components(separatedBy: "/")
                 if components.count == 4, components[0] == "" && components[1] == "api" {
-                    print("API call", components[2], components[3])
+                    //print("API call", components[2], components[3])
                     let json = req.jsonBody ?? [:]
                     delegate.service(self, onCall: components[2], params: json, socket: sock, context: components[3])
                     return
@@ -140,7 +140,7 @@ extension BonjourService : GCDAsyncSocketDelegate {
                 delegate.service(self, onRequest: req, socket: sock)
             }
         } catch {
-            print("buffering", buffer.count)
+            print("  buffering", buffer.count)
             buffers[uuidSock] = buffer
         }
         

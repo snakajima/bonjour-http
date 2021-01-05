@@ -95,20 +95,22 @@ extension BonjourConnection : GCDAsyncSocketDelegate {
         } else {
             buffer = data
         }
-        guard let res = BonjourResponse(data: buffer!) else {
-            print("buffering", buffer!.count)
-            return
-        }
-        buffer = nil
-        if let context = res.headers["X-Context"] {
-            if let callback = callbacks[context] {
-                callback(res, res.jsonBody ?? [:])
-                callbacks.removeValue(forKey: context)
-                return
+        do {
+            let result = try BonjourParser.parseHeader(data: buffer!)
+            let res = BonjourResponse(result: result)
+            buffer = result.extraBody
+            if let context = res.headers["X-Context"] {
+                if let callback = callbacks[context] {
+                    callback(res, res.jsonBody ?? [:])
+                    callbacks.removeValue(forKey: context)
+                    return
+                }
             }
+            
+            delegate?.on(responce: res, connection: self)
+        } catch {
+            print("buffering", buffer!.count)
         }
-        
-        delegate?.on(responce: res, connection: self)
     }
     
     public func socket(_ sock: GCDAsyncSocket, didWriteDataWithTag tag: Int) {
