@@ -57,7 +57,8 @@ public class BonjourConnection: NSObject, ObservableObject {
     public func call(_ name: String, params: [String:Any], callback: @escaping CompletionHandler) {
         let uuid = UUID().uuidString
         callbacks[uuid] = callback
-        var req = BonjourRequest(path: "/api/\(name)/\(uuid)")
+        var req = BonjourRequest(path: "/api/\(name)")
+        req.headers["X-Context"] = uuid
         req.setBody(json: params)
         send(req: req)
     }
@@ -90,26 +91,37 @@ extension BonjourConnection : GCDAsyncSocketDelegate {
     
     public func socket(_ sock: GCDAsyncSocket, didRead data: Data, withTag tag: Int) {
         sock.readData(withTimeout: -1, tag: 3)
-        if let _ = self.buffer {
-            buffer!.append(data)
+        let buffer: Data
+        if let prev = self.buffer {
+            buffer = prev + data
+            self.buffer = nil
         } else {
             buffer = data
         }
+        innerSocket(sock, buffer: buffer)
+    }
+    
+    private func innerSocket(_ sock: GCDAsyncSocket, buffer: Data) {
+        var extraBody: Data?
         do {
-            let result = try BonjourParser.parse(buffer!)
+            let result = try BonjourParser.parse(buffer)
             let res = BonjourResponse(result: result)
-            buffer = result.extraBody
-            if let context = res.headers["X-Context"] {
-                if let callback = callbacks[context] {
+            if let extra = result.extraBody {
+                print("  extra body", extra.count)
+                extraBody = extra
+            }
+            if let context = res.headers["X-Context"],
+               let callback = callbacks[context] {
                     callback(res, res.jsonBody ?? [:])
                     callbacks.removeValue(forKey: context)
-                    return
-                }
+            } else {
+                delegate?.on(responce: res, connection: self)
             }
-            
-            delegate?.on(responce: res, connection: self)
         } catch {
-            print("buffering", buffer!.count)
+            print("buffering", buffer.count)
+        }
+        if let extraBody = extraBody {
+            self.innerSocket(sock, buffer: extraBody)
         }
     }
     
