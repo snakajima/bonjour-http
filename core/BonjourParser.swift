@@ -17,7 +17,7 @@ class BonjourParser {
         let firstLine: String
         let headers: [String:String]
         var body: Data? = nil
-        var extraBody: Data? = nil
+        var extraData: Data? = nil
     }
     
     private static func extractHeader(data:Data) throws -> (Data, Data?) {
@@ -72,7 +72,7 @@ class BonjourParser {
             }
             if bodyAll.count > length {
                 result.body = bodyAll.subdata(in: 0..<length)
-                result.extraBody = bodyAll.subdata(in: length..<bodyAll.count)
+                result.extraData = bodyAll.subdata(in: length..<bodyAll.count)
             } else {
                 result.body = bodyAll
             }

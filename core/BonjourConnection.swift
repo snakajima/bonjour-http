@@ -112,9 +112,9 @@ extension BonjourConnection : GCDAsyncSocketDelegate {
             } else {
                 delegate?.on(responce: res, connection: self)
             }
-            if let extraBody = result.extraBody {
-                print("  extra body", extraBody.count)
-                self.innerSocket(sock, buffer: extraBody)
+            if let extraData = result.extraData {
+                print("  extra data", extraData.count)
+                self.innerSocket(sock, buffer: extraData)
             }
         } catch {
             print("buffering", buffer.count)
