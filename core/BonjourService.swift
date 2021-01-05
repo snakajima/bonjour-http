@@ -127,17 +127,16 @@ extension BonjourService : GCDAsyncSocketDelegate {
                 extraBody = extra
             }
 
-            print("req:", req, uuidSock)
+            print("=== REQ:", req, uuidSock)
             if let delegate = self.delegate {
                 let components = req.path.components(separatedBy: "/")
                 if components.count == 4, components[0] == "" && components[1] == "api" {
                     //print("API call", components[2], components[3])
                     let json = req.jsonBody ?? [:]
                     delegate.service(self, onCall: components[2], params: json, socket: sock, context: components[3])
-                    return
+                } else {
+                    delegate.service(self, onRequest: req, socket: sock)
                 }
-
-                delegate.service(self, onRequest: req, socket: sock)
             }
         } catch {
             print("  buffering", buffer.count)
