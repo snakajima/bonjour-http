@@ -96,7 +96,7 @@ extension BonjourConnection : GCDAsyncSocketDelegate {
             buffer = data
         }
         do {
-            let result = try BonjourParser.parseHeader(data: buffer!)
+            let result = try BonjourParser.parse(buffer!)
             let res = BonjourResponse(result: result)
             buffer = result.extraBody
             if let context = res.headers["X-Context"] {

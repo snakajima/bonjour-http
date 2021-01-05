@@ -120,7 +120,7 @@ extension BonjourService : GCDAsyncSocketDelegate {
     public func innerSocket(_ sock: GCDAsyncSocket, uuidSock: UUID, buffer: Data) {
         var extraBody: Data?
         do {
-            let result = try BonjourParser.parseHeader(data: buffer)
+            let result = try BonjourParser.parse(buffer)
             let req = BonjourRequest(result: result)
             if let extra = result.extraBody {
                 print("  extra body", extra.count)

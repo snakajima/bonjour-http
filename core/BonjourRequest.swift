@@ -59,7 +59,7 @@ public struct BonjourRequest {
     }
 
     init(result: BonjourParser.Result) {
-        //let (firstLine, headers, body) = try BonjourParser.parseHeader(data: data)
+        //let (firstLine, headers, body) = try BonjourParser.perse(data: data)
         let parts = result.firstLine.components(separatedBy: " ")
         if parts.count == 3 {
             (method, path, proto) = (parts[0], parts[1], parts[2])

@@ -21,7 +21,6 @@ class BonjourParser {
     }
     
     private static func extractHeader(data:Data) throws -> (Data, Data?) {
-        // LATER: Optimize it for a very large body (such as images)
         let rows = data.split(separator: 0x0a)
         var headerLength = 0
         var counter = 0
@@ -47,7 +46,7 @@ class BonjourParser {
         return (headerData, body)
     }
     
-    private static func extractHeaders(headerData: Data) -> Result {
+    private static func parseHeader(headerData: Data) -> Result {
         let string = String(decoding: headerData, as: UTF8.self)
         var lines = string.components(separatedBy: "\n").map { $0.trimmingCharacters(in: CharacterSet(arrayLiteral: "\r"))}
         let firstLine = lines.removeFirst()
@@ -63,9 +62,9 @@ class BonjourParser {
         return Result(firstLine: firstLine, headers: headers)
     }
     
-    static func parseHeader(data: Data) throws -> Result {
+    static func parse(_ data: Data) throws -> Result {
         let (headerData, body) = try BonjourParser.extractHeader(data: data)
-        var result = BonjourParser.extractHeaders(headerData: headerData)
+        var result = BonjourParser.parseHeader(headerData: headerData)
         if let contentLength = result.headers["Content-Length"],
            let length = Int(contentLength) {
             guard let bodyAll = body, bodyAll.count >= length else {
