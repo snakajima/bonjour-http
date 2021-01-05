@@ -34,8 +34,8 @@ class SampleHTTPServer : NSObject, BonjourServiceDelegate, ObservableObject {
         }
     }
     
-    func service(_ service: BonjourService, onRequest req: BonjourRequest, socket: GCDAsyncSocket) {
-        var res = BonjourResponse()
+    func service(_ service: BonjourService, onRequest req: BonjourRequest, socket: GCDAsyncSocket, context: String) {
+        var res = BonjourResponse(context: context)
         switch(req.path) {
         case "/":
             res.setBody(string: "<html><body>Hello World!</body></html>")

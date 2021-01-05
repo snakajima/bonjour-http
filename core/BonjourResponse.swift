@@ -15,8 +15,9 @@ public struct BonjourResponse {
     public var body: Data? = nil
     public var headers = ["Server":"bonjour-http"]
     
-    public init() {
+    public init(context: String) {
         proto = "HTTP/1.1"
+        headers["X-Context"] = context
     }
 
     init(result: BonjourParser.Result) {

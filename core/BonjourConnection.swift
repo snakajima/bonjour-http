@@ -47,7 +47,13 @@ public class BonjourConnection: NSObject, ObservableObject {
         }
     }
     
-    public func send(req: BonjourRequest) {
+    public func send(req reqInput: BonjourRequest, callback: CompletionHandler? = nil) {
+        var req = reqInput
+        if let callback = callback {
+            let uuid = UUID().uuidString
+            callbacks[uuid] = callback
+            req.headers["X-Context"] = uuid
+        }
         socket?.write(req.headerData, withTimeout: -1.0, tag: 3)
         if let body = req.body {
             socket?.write(body, withTimeout: -1.0, tag: 3)
@@ -55,12 +61,9 @@ public class BonjourConnection: NSObject, ObservableObject {
     }
     
     public func call(_ name: String, params: [String:Any], callback: @escaping CompletionHandler) {
-        let uuid = UUID().uuidString
-        callbacks[uuid] = callback
         var req = BonjourRequest(path: "/api/\(name)")
-        req.headers["X-Context"] = uuid
         req.setBody(json: params)
-        send(req: req)
+        send(req: req, callback: callback)
     }
 }
 

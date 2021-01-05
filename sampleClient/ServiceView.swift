@@ -33,7 +33,9 @@ struct ServiceView: View {
             }
             Button(action: {
                 let req = BonjourRequest(path: "/foo")
-                connection.send(req: req)
+                connection.send(req: req) { (res, json) in
+                    print("callback", res.statusText)
+                }
             }, label: {
                 Text("Get")
             })
@@ -132,7 +134,9 @@ struct ServiceView: View {
         }
         var req = BonjourRequest(path: "/image", method: "POST")
         req.setBody(data: data, type: "image/jpeg")
-        connection.send(req: req)
+        connection.send(req: req) { (res, json) in
+            print("image posted: \(res.statusText)")
+        }
         //image = Image(uiImage: inputImage)
     }
 }

@@ -12,7 +12,7 @@ import CocoaAsyncSocket
 public protocol BonjourServiceDelegate: NSObjectProtocol {
     func serviceRunningStateDidChange(_ service: BonjourService)
     func serviceClientsDidChange(_ service: BonjourService)
-    func service(_ service: BonjourService, onRequest: BonjourRequest, socket: GCDAsyncSocket)
+    func service(_ service: BonjourService, onRequest: BonjourRequest, socket: GCDAsyncSocket, context: String)
     func service(_ service: BonjourService, onCall: String, params: [String:Any], socket: GCDAsyncSocket, context: String)
 }
 
@@ -77,8 +77,7 @@ extension GCDAsyncSocket {
     }
     
     public func respond(to socket: GCDAsyncSocket, context: String, result: [String:Any], statusText: String? = nil) {
-        var res = BonjourResponse()
-        res.headers["X-Context"] = context
+        var res = BonjourResponse(context: context)
         res.setBody(json: result)
         if let statusText = statusText {
             res.statusText = statusText
@@ -124,10 +123,9 @@ extension BonjourService : GCDAsyncSocketDelegate {
                 let components = req.path.components(separatedBy: "/")
                 if components.count == 3, components[0] == "" && components[1] == "api" {
                     let json = req.jsonBody ?? [:]
-                    let context = req.headers["X-Context"] ?? "unspecified"
-                    delegate.service(self, onCall: components[2], params: json, socket: sock, context: context)
+                    delegate.service(self, onCall: components[2], params: json, socket: sock, context: req.context)
                 } else {
-                    delegate.service(self, onRequest: req, socket: sock)
+                    delegate.service(self, onRequest: req, socket: sock, context: req.context)
                 }
             }
             if let extraData = result.extraData {

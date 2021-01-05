@@ -20,6 +20,9 @@ public struct BonjourRequest {
         }.joined(separator: "\r\n")
         return Data("\(method) \(path) \(proto)\r\n\(headersSection)\r\n\r\n".utf8)
     }
+    var context: String {
+        headers["X-Context"] ?? "__unspecified__"
+    }
 
     public init(path: String, method: String = "GET") {
         self.path = path
