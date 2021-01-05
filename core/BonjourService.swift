@@ -124,7 +124,7 @@ extension BonjourService : GCDAsyncSocketDelegate {
                 extraBody = extra
             }
 
-            print("=== REQ:", req, uuidSock)
+            print("REQ:", req)
             if let delegate = self.delegate {
                 let components = req.path.components(separatedBy: "/")
                 if components.count == 4, components[0] == "" && components[1] == "api" {
