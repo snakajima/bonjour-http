@@ -69,7 +69,7 @@ public class BonjourConnection: NSObject, ObservableObject {
 
 extension BonjourConnection : NetServiceDelegate {
     public func netServiceDidResolveAddress(_ sender: NetService) {
-        print("netServiceDidResolveAddress", sender.addresses!)
+        //print("netServiceDidResolveAddress", sender.addresses!)
         connect()
     }
     
