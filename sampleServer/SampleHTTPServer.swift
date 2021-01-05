@@ -28,22 +28,22 @@ class SampleHTTPServer : NSObject, BonjourServiceDelegate, ObservableObject {
             service.respond(to: socket, context: context, result: ["result": "How are you?"])
         default:
             service.respond(to: socket, context: context, result: ["error": "invalid function name"], statusText: "404 Not found")
+            var res = BonjourResponse()
+            switch(req.path) {
+            case "/":
+                res.setBody(string: "<html><body>Hello World!</body></html>")
+            case "/image":
+                if let body = req.body {
+                    image = NSImage(data: body)?.cgImage(forProposedRect: nil, context: nil, hints: nil)
+                }
+            default:
+                res.setBody(string: "<html><body>Page Not Found</body></html>")
+                res.statusText = "404 Not Found"
+            }
+            service.send(responce: res, to: socket)
         }
     }
     
     func service(_ service: BonjourService, onRequest req: BonjourRequest, socket: GCDAsyncSocket) {
-        var res = BonjourResponse()
-        switch(req.path) {
-        case "/":
-            res.setBody(string: "<html><body>Hello World!</body></html>")
-        case "/image":
-            if let body = req.body {
-                image = NSImage(data: body)?.cgImage(forProposedRect: nil, context: nil, hints: nil)
-            }
-        default:
-            res.setBody(string: "<html><body>Page Not Found</body></html>")
-            res.statusText = "404 Not Found"
-        }
-        service.send(responce: res, to: socket)
     }
 }
