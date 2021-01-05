@@ -12,6 +12,9 @@ struct ServiceView: View {
     let service:NetService
     @ObservedObject var connection:BonjourConnection
     private let client = SampleHTTPClient()
+    @State private var showingImagePicker = false
+    @State private var inputImage: UIImage?
+
     init(service:NetService) {
         self.service = service
         self.connection = BonjourConnection(service)
@@ -103,6 +106,12 @@ struct ServiceView: View {
             }, label: {
                 Text("Bad HTTP Call")
             })
+            Button(action: {
+                print("photo")
+                self.showingImagePicker = true
+            }, label: {
+                Text("Image")
+            })
         }
         .onAppear() {
             self.connection.connect()
@@ -110,5 +119,13 @@ struct ServiceView: View {
         .onDisappear() {
             self.connection.disconnect()
         }
+        .sheet(isPresented: $showingImagePicker, onDismiss: loadImage, content: {
+            ImagePicker(image: $inputImage)
+        })
+    }
+    func loadImage() {
+        //guard let inputImage = inputImage else { return }
+        print("loadImage")
+        //image = Image(uiImage: inputImage)
     }
 }
