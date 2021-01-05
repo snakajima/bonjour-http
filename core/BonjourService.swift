@@ -98,38 +98,53 @@ extension BonjourService : GCDAsyncSocketDelegate {
     }
     
     public func socket(_ sock: GCDAsyncSocket, didRead data: Data, withTag tag: Int) {
-        sock.readData(withTimeout: -1, tag: 3)
+        //let string = String(decoding: data, as: UTF8.self)
+        //print(string)
         
+        sock.readData(withTimeout: -1, tag: 3)
         guard let uuidSock = sock.uuid else {
             return
         }
-        
         var buffer: Data
         if let prev = buffers[uuidSock] {
             buffer = prev
             buffer.append(data)
+            buffers.removeValue(forKey: uuidSock)
         } else {
             buffer = data
         }
-        
-        guard let req = BonjourRequest(data: buffer) else {
-            print("buffering", buffer.count)
-            buffers[uuidSock] = buffer
-            return
-        }
-        buffers.removeValue(forKey: uuidSock)
-        
-        print("req:", req, uuidSock)
-        if let delegate = self.delegate {
-            let components = req.path.components(separatedBy: "/")
-            if components.count == 4, components[0] == "" && components[1] == "api" {
-                print("API call", components[2], components[3])
-                let json = req.jsonBody ?? [:]
-                delegate.service(self, onCall: components[2], params: json, socket: sock, context: components[3])
-                return
+
+        self.innerSocket(sock, uuidSock: uuidSock, buffer: buffer)
+    }
+    
+    public func innerSocket(_ sock: GCDAsyncSocket, uuidSock: UUID, buffer: Data) {
+        var extraBody: Data?
+        do {
+            let result = try BonjourParser.parseHeader(data: buffer)
+            let req = BonjourRequest(result: result)
+            if let extra = result.extraBody {
+                print("  extra body", extra.count)
+                extraBody = extra
             }
 
-            delegate.service(self, onRequest: req, socket: sock)
+            print("=== REQ:", req, uuidSock)
+            if let delegate = self.delegate {
+                let components = req.path.components(separatedBy: "/")
+                if components.count == 4, components[0] == "" && components[1] == "api" {
+                    //print("API call", components[2], components[3])
+                    let json = req.jsonBody ?? [:]
+                    delegate.service(self, onCall: components[2], params: json, socket: sock, context: components[3])
+                } else {
+                    delegate.service(self, onRequest: req, socket: sock)
+                }
+            }
+        } catch {
+            print("  buffering", buffer.count)
+            buffers[uuidSock] = buffer
+        }
+        
+        if let extraBody = extraBody {
+            self.innerSocket(sock, uuidSock: uuidSock, buffer: extraBody)
         }
     }
     

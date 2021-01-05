@@ -19,17 +19,12 @@ public struct BonjourResponse {
         proto = "HTTP/1.1"
     }
 
-    init?(data: Data) {
-        do {
-            let (firstLine, headers, body) = try BonjourParser.parseHeader(data: data)
-            var parts = firstLine.components(separatedBy: " ")
-            proto = parts.removeFirst()
-            statusText = parts.joined(separator: " ")
-            self.body = body
-            self.headers = headers
-        } catch {
-            return nil
-        }
+    init(result: BonjourParser.Result) {
+        var parts = result.firstLine.components(separatedBy: " ")
+        proto = parts.removeFirst()
+        statusText = parts.joined(separator: " ")
+        self.body = result.body
+        self.headers = result.headers
     }
 
     public mutating func setBody(string: String, type: String="text/html") {

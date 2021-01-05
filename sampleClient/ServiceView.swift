@@ -74,6 +74,25 @@ struct ServiceView: View {
                 Text("HTTP Call")
             })
             Button(action: {
+                let json = [
+                    "params": [
+                        "message":"Hello World",
+                        "foo": 10,
+                        "bar": [1, 2, 3]
+                    ]
+                ]
+                connection.call("foo", params: [:]) { (res, _) in print( res.isSuccess ) }
+                connection.call("foo", params: [:]) { (res, _) in print( res.isSuccess ) }
+                connection.call("foo", params: [:]) { (res, _) in print( res.isSuccess ) }
+                connection.call("foo", params: [:]) { (res, _) in print( res.isSuccess ) }
+                connection.call("foo", params: json) { (res, _) in print( res.isSuccess ) }
+                connection.call("foo", params: json) { (res, _) in print( res.isSuccess ) }
+                connection.call("foo", params: json) { (res, _) in print( res.isSuccess ) }
+                connection.call("foo", params: json) { (res, _) in print( res.isSuccess ) }
+            }, label: {
+                Text("HTTP Calls")
+            })
+            Button(action: {
                 connection.call("bad", params: [:]) { (res, json) in
                     if res.isSuccess {
                         print("bad callback", json, res.statusText, res.status)

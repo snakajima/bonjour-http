@@ -13,6 +13,12 @@ class BonjourParser {
         case incompleteBody
         case missingContentLength
     }
+    struct Result {
+        let firstLine: String
+        let headers: [String:String]
+        var body: Data? = nil
+        var extraBody: Data? = nil
+    }
     
     private static func extractHeader(data:Data) throws -> (Data, Data?) {
         // LATER: Optimize it for a very large body (such as images)
@@ -41,7 +47,7 @@ class BonjourParser {
         return (headerData, body)
     }
     
-    private static func extractHeaders(headerData: Data) -> (String, [String:String]) {
+    private static func extractHeaders(headerData: Data) -> Result {
         let string = String(decoding: headerData, as: UTF8.self)
         var lines = string.components(separatedBy: "\n").map { $0.trimmingCharacters(in: CharacterSet(arrayLiteral: "\r"))}
         let firstLine = lines.removeFirst()
@@ -54,19 +60,26 @@ class BonjourParser {
                 headers[parts.first!] = parts.last!
             }
         }
-        return (firstLine, headers)
+        return Result(firstLine: firstLine, headers: headers)
     }
     
-    static func parseHeader(data: Data) throws -> (String, [String:String], Data?) {
+    static func parseHeader(data: Data) throws -> Result {
         let (headerData, body) = try BonjourParser.extractHeader(data: data)
-        let (firstLine, headers) = BonjourParser.extractHeaders(headerData: headerData)
-        if let length = headers["Content-Length"] {
-            guard let body = body,body.count == Int(length) else {
+        var result = BonjourParser.extractHeaders(headerData: headerData)
+        if let contentLength = result.headers["Content-Length"],
+           let length = Int(contentLength) {
+            guard let bodyAll = body, bodyAll.count >= length else {
                 throw ParserError.incompleteBody
+            }
+            if bodyAll.count > length {
+                result.body = bodyAll.subdata(in: 0..<length)
+                result.extraBody = bodyAll.subdata(in: length..<bodyAll.count)
+            } else {
+                result.body = bodyAll
             }
         } else if let _ = body {
             throw ParserError.missingContentLength
         }
-        return (firstLine, headers, body)
+        return result
     }
 }

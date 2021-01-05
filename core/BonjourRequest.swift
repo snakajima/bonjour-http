@@ -52,23 +52,18 @@ public struct BonjourRequest {
         return try? JSONSerialization.jsonObject(with: body, options: []) as? [String:Any]
     }
 
-    init?(data: Data) {
-        do {
-            let (firstLine, headers, body) = try BonjourParser.parseHeader(data: data)
-            let parts = firstLine.components(separatedBy: " ")
-            if parts.count == 3 {
-                (method, path, proto) = (parts[0], parts[1], parts[2])
-            } else {
-                // Treat invalid header as the access to the root
-                print("### ERROR Invalid Fist Line", firstLine)
-                (method, path, proto) = ("GET", "/", "HTTP/1.1")
-            }
-            self.body = body
-            self.headers = headers
-        } catch {
-            print("### Error", error)
-            return nil
+    init(result: BonjourParser.Result) {
+        //let (firstLine, headers, body) = try BonjourParser.parseHeader(data: data)
+        let parts = result.firstLine.components(separatedBy: " ")
+        if parts.count == 3 {
+            (method, path, proto) = (parts[0], parts[1], parts[2])
+        } else {
+            // Treat invalid header as the access to the root
+            print("### ERROR Invalid Fist Line", result.firstLine)
+            (method, path, proto) = ("GET", "/", "HTTP/1.1")
         }
+        self.body = result.body
+        self.headers = result.headers
     }
 }
 
