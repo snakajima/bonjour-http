@@ -69,9 +69,9 @@ struct ServiceView: View {
                 ]
                 connection.call("foo", params: json) { (res, json) in
                     if res.isSuccess {
-                        print("foo callback", json, res.statusText, res.status)
+                        print("foo callback", json ?? [:], res.statusText, res.status)
                     } else {
-                        print("foo failed", json, res.statusText, res.status)
+                        print("foo failed", json ?? [:], res.statusText, res.status)
                     }
                 }
             }, label: {
@@ -99,9 +99,9 @@ struct ServiceView: View {
             Button(action: {
                 connection.call("bad", params: [:]) { (res, json) in
                     if res.isSuccess {
-                        print("bad callback", json, res.statusText, res.status)
+                        print("bad callback", json ?? [:], res.statusText, res.status)
                     } else {
-                        print("bad failed", json, res.statusText, res.status)
+                        print("bad failed", json ?? [:], res.statusText, res.status)
                     }
                 }
             }, label: {
