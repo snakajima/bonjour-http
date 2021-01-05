@@ -41,7 +41,7 @@ class SampleHTTPServer : NSObject, BonjourServiceDelegate, ObservableObject {
                 image = NSImage(data: body)?.cgImage(forProposedRect: nil, context: nil, hints: nil)
                 print(image ?? "no image")
             }
-            res.setBody(string: "foo")
+            //res.setBody(string: "foo")
         default:
             res.setBody(string: "<html><body>Page Not Found</body></html>")
             res.statusText = "404 Not Found"

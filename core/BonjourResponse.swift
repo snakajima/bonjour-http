@@ -13,7 +13,7 @@ public struct BonjourResponse {
     public var status:Int { Int(statusText.components(separatedBy: " ").first!) ?? 0 }
     public var isSuccess:Bool { status >= 200 && status < 300 }
     public var body: Data? = nil
-    public var headers = [String:String]()
+    public var headers = ["Server":"bonjour-http"]
     
     public init() {
         proto = "HTTP/1.1"
