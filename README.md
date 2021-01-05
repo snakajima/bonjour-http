@@ -6,31 +6,25 @@ It also has an http-call wrapper, which allows the client to call a specific fun
 
 ```
 // Client-side
-let json = [
-    "message": "Hello World"
-]
-connection.call("greeting", params: json) { (res, json) in
+connection.call("greeting", params: ["message": "How are you?"]) { (res, json) in
     if let res.isSuccess {
-        print("Response from server", json)
+        // process the response
+        ...
     }
 }
 ```
 ```
 // Server-side
-class SampleHTTPServer : NSObject, BonjourServiceDelegate {
-    func service(_ service: BonjourService, onCall function: String, params: [String : Any], socket: GCDAsyncSocket, context: String) {
-        switch(function) {
-        case "greeting":
-            let json = [
-                "result": "How are you?"
-            ]
-            service.respond(to: socket, context: context, result: json)
-        default:
-            // handle error
-            ...
-        }
+func service(_ service: BonjourService, onCall: String, params: [String : Any], 
+             socket: GCDAsyncSocket, context: String) {
+    switch(onCall) {
+    case "greeting":
+        service.respond(to: socket, context: context, 
+                        result: ["message": "I'm fine, thank you."])
+    default:
+        // handle error
+        ...
     }
-    ...
 }
 ```
 
