@@ -111,12 +111,12 @@ extension BonjourService : GCDAsyncSocketDelegate {
             buffer = data
         }
 
-        self.innerSocket(sock, uuidSock: uuidSock, buffer: buffer)
+        self.innerSocket(sock, uuidSock: uuidSock, data: buffer)
     }
     
-    private func innerSocket(_ sock: GCDAsyncSocket, uuidSock: UUID, buffer: Data) {
+    private func innerSocket(_ sock: GCDAsyncSocket, uuidSock: UUID, data: Data) {
         do {
-            let result = try BonjourParser.parse(buffer)
+            let result = try BonjourParser.parse(data)
             let req = BonjourRequest(result: result)
 
             print("REQ:", req)
@@ -132,11 +132,11 @@ extension BonjourService : GCDAsyncSocketDelegate {
             }
             if let extraData = result.extraData {
                 print("  extra data", extraData.count)
-                self.innerSocket(sock, uuidSock: uuidSock, buffer: extraData)
+                self.innerSocket(sock, uuidSock: uuidSock, data: extraData)
             }
         } catch {
-            print("  buffering", buffer.count)
-            buffers[uuidSock] = buffer
+            print("  buffering", data.count)
+            buffers[uuidSock] = data
         }
     }
     
