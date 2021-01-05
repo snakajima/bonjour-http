@@ -25,7 +25,10 @@ class SampleHTTPServer : NSObject, BonjourServiceDelegate, ObservableObject {
     func service(_ service: BonjourService, onCall function: String, params: [String : Any], socket: GCDAsyncSocket, context: String) {
         switch(function) {
         case "foo":
-            service.respond(to: socket, context: context, result: ["result": "How are you?"])
+            let delay = params["delay"] as? Double ?? 0.1
+            DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
+                service.respond(to: socket, context: context, result: ["result": "How are you? \(delay)"])
+            }
         default:
             service.respond(to: socket, context: context, result: ["error": "invalid function name"], statusText: "404 Not found")
         }

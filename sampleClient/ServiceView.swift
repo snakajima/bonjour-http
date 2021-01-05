@@ -59,7 +59,8 @@ struct ServiceView: View {
                 Text("Post JSON")
             })
             Button(action: {
-                let json = [
+                let json:[String:Any] = [
+                    "delay": 0.2,
                     "params": [
                         "message":"Hello World",
                         "foo": 10,
@@ -85,8 +86,8 @@ struct ServiceView: View {
                     ]
                 ]
                 connection.call("foo", params: [:]) { (res, _) in print( "1", res.isSuccess ) }
-                connection.call("foo", params: [:]) { (res, _) in print( "2", res.isSuccess ) }
-                connection.call("foo", params: [:]) { (res, _) in print( "3", res.isSuccess ) }
+                connection.call("foo", params: ["delay":1.0]) { (res, _) in print( "2", res.isSuccess ) }
+                connection.call("foo", params: ["delay":0.5]) { (res, _) in print( "3", res.isSuccess ) }
                 connection.call("foo", params: [:]) { (res, _) in print( "4", res.isSuccess ) }
                 connection.call("foo", params: json) { (res, _) in print( "5", res.isSuccess ) }
                 connection.call("foo", params: json) { (res, _) in print( "6", res.isSuccess ) }

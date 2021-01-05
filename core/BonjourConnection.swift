@@ -98,12 +98,12 @@ extension BonjourConnection : GCDAsyncSocketDelegate {
         } else {
             buffer = data
         }
-        innerSocket(sock, buffer: buffer)
+        innerSocket(sock, data: buffer)
     }
     
-    private func innerSocket(_ sock: GCDAsyncSocket, buffer: Data) {
+    private func innerSocket(_ sock: GCDAsyncSocket, data: Data) {
         do {
-            let result = try BonjourParser.parse(buffer)
+            let result = try BonjourParser.parse(data)
             let res = BonjourResponse(result: result)
             if let context = res.headers["X-Context"],
                let callback = callbacks[context] {
@@ -114,10 +114,11 @@ extension BonjourConnection : GCDAsyncSocketDelegate {
             }
             if let extraData = result.extraData {
                 print("  extra data", extraData.count)
-                self.innerSocket(sock, buffer: extraData)
+                self.innerSocket(sock, data: extraData)
             }
         } catch {
-            print("buffering", buffer.count)
+            print("buffering", data.count)
+            buffer = data
         }
     }
     
