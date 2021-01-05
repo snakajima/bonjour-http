@@ -7,10 +7,12 @@
 
 import Foundation
 import CocoaAsyncSocket
+import AppKit
 
 class SampleHTTPServer : NSObject, BonjourServiceDelegate, ObservableObject {
     @Published public var clients = [GCDAsyncSocket]()
     @Published public var isRunning = false
+    @Published public var image: CGImage? = nil
     
     func serviceClientsDidChange(_ service: BonjourService) {
         clients = service.clients
@@ -29,11 +31,17 @@ class SampleHTTPServer : NSObject, BonjourServiceDelegate, ObservableObject {
         }
     }
     
-    func service(_ service: BonjourService, onRequest request: BonjourRequest, socket: GCDAsyncSocket) {
+    func service(_ service: BonjourService, onRequest req: BonjourRequest, socket: GCDAsyncSocket) {
         var res = BonjourResponse()
-        switch(request.path) {
+        switch(req.path) {
         case "/":
             res.setBody(string: "<html><body>Hello World!</body></html>")
+        case "/image":
+            if let body = req.body {
+                image = NSImage(data: body)?.cgImage(forProposedRect: nil, context: nil, hints: nil)
+                print(image ?? "no image")
+            }
+            res.setBody(string: "foo")
         default:
             res.setBody(string: "<html><body>Page Not Found</body></html>")
             res.statusText = "404 Not Found"

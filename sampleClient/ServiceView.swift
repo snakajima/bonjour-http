@@ -126,6 +126,12 @@ struct ServiceView: View {
     func loadImage() {
         //guard let inputImage = inputImage else { return }
         print("loadImage")
+        guard let data = inputImage?.jpegData(compressionQuality: 0.7) else {
+            return
+        }
+        var req = BonjourRequest(path: "/image", method: "POST")
+        req.setBody(data: data, type: "image/jpeg")
+        connection.send(req: req)
         //image = Image(uiImage: inputImage)
     }
 }

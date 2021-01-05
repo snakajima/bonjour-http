@@ -27,6 +27,12 @@ public struct BonjourRequest {
         self.proto = "HTTP/1.1"
         self.headers = ["User-Agent":"bonjour-http", "Accept":"*/*"]
     }
+    
+    public mutating func setBody(data: Data, type: String) {
+        body = data
+        headers["Content-Length"] = String(data.count)
+        headers["Content-Type"] = type
+    }
 
     public mutating func setBody(string: String, type: String="text/html") {
         body = Data(string.utf8)

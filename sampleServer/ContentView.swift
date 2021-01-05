@@ -36,6 +36,12 @@ struct ContentView: View {
                     Text("Start")
                 })
             }
+            if let image = myServer.image {
+                Image(nsImage: NSImage(cgImage: image, size: CGSize(width: image.width, height: image.height)))
+                    .resizable()
+                    .scaledToFit()
+                    .frame(height: 200)
+            }
         }.onAppear() {
             service.delegate = myServer
             service.start()
