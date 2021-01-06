@@ -36,7 +36,9 @@ Bonjour is a great mechanism to establish connections among devices on a local n
 
 **BonjourBrowser** allows an application to discover Bonjour services (NetService objects) with specific type, and present them to the user to choose from (note: this library has no UI code).
 
-**BonjourConnection** allows an application to establish a connection between a Bonjour service selected by the user. The application calls its send(req:) method to send an HTTP request to the connected sever. In order to receive responces from the server, the application needs to create an object, which implements **BonjourConnectionDelegate** protocol. 
+**BonjourConnection** allows an application to establish a connection between a Bonjour service selected by the user. The application calls its *send(req:callback:)* method or *call(req:name:params:callback)* method to send an HTTP request to the connected sever, then will receives the responce asynchronously. 
+
+**BonjourConnectionDelegate** is a protocol an application may implement to receive responces not processed by the *callback* function for *send* and *call* method. 
 
 **BonjourRequest** represents an HTTP request, which an application creates and sends using an established BonjourConnection.
 
@@ -44,7 +46,7 @@ Bonjour is a great mechanism to establish connections among devices on a local n
 
 ## Classes for Server
 
-**BonjourService** allows an application to publish a specific type of Bonjour service. An application needs to define a class respresenting HTTP server, which implements **BonjourServiceDelegate** protocol. 
+**BonjourService** allows an application to publish a specific type of Bonjour service. An application needs to define a class respresenting an HTTP server, which implements **BonjourServiceDelegate** protocol. 
 
 **BonjourRequest** represents an HTTP request sent from the client application. The server receives it via service:onRequest:socket:context method of **BonjourServiceDelegate** protocol.
 
