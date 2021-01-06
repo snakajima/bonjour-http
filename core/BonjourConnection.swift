@@ -9,6 +9,7 @@ import Foundation
 import CocoaAsyncSocket
 
 public protocol BonjourConnectionDelegate : NSObjectProtocol {
+    // Only recponces not processed by callback (of send or call methos) will come here
     func on(responce: BonjourResponse, connection: BonjourConnection)
 }
 
@@ -50,9 +51,9 @@ public class BonjourConnection: NSObject, ObservableObject {
     public func send(req reqInput: BonjourRequest, callback: CompletionHandler? = nil) {
         var req = reqInput
         if let callback = callback {
-            let uuid = UUID().uuidString
-            callbacks[uuid] = callback
-            req.headers["X-Context"] = uuid
+            let context = UUID().uuidString
+            callbacks[context] = callback
+            req.headers["X-Context"] = context
         }
         socket?.write(req.headerData, withTimeout: -1.0, tag: 3)
         if let body = req.body {
@@ -60,7 +61,7 @@ public class BonjourConnection: NSObject, ObservableObject {
         }
     }
     
-    public func call(_ name: String, params: [String:Any], callback: @escaping CompletionHandler) {
+    public func call(_ name: String, params: [String:Any], callback: CompletionHandler? = nil) {
         var req = BonjourRequest(path: "/api/\(name)", method: .Post)
         req.setBody(json: params)
         send(req: req, callback: callback)
@@ -69,7 +70,6 @@ public class BonjourConnection: NSObject, ObservableObject {
 
 extension BonjourConnection : NetServiceDelegate {
     public func netServiceDidResolveAddress(_ sender: NetService) {
-        //print("netServiceDidResolveAddress", sender.addresses!)
         connect()
     }
     
@@ -120,7 +120,7 @@ extension BonjourConnection : GCDAsyncSocketDelegate {
                 self.innerSocket(sock, data: extraData)
             }
         } catch {
-            print("buffering", data.count)
+            print("  buffering", data.count)
             buffer = data
         }
     }
