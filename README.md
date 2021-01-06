@@ -46,13 +46,13 @@ Bonjour is a great mechanism to establish connections among devices on a local n
 
 **BonjourService** allows an application to publish a specific type of Bonjour service. An application needs to define a class respresenting HTTP server, which implements **BonjourServiceDelegate** protocol. 
 
-Here is an example, which always returns "Hello World!" page regardless of the path.
+Here is an example, which returns "Hello World!" page at the root ("/").
 
 ```
 class SampleHTTPServer : NSObject, BonjourServiceDelegate {
-    func on(reqeust: BonjourRequest, service: BonjourService, socket: GCDAsyncSocket) {
-        var res = BonjourResponce()
-        switch(reqeust.path) {
+    func service(_ service: BonjourService, onRequest req: BonjourRequest, socket: GCDAsyncSocket, context: String) {
+        var res = BonjourResponce(context: context)
+        switch(req.path) {
         case "/":
             res.setBody(string: "<html><body>Hello World!</body></html>")
         default:
