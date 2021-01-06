@@ -40,7 +40,7 @@ class SampleHTTPServer : NSObject, BonjourServiceDelegate, ObservableObject {
         switch(req.path) {
         case "/":
             res.setBody(string: "<html><body>Hello World!</body></html>")
-        case "/image":
+        case "/image" where req.method == .Post:
             if let body = req.body {
                 image = NSImage(data: body)?.cgImage(forProposedRect: nil, context: nil, hints: nil)
             }

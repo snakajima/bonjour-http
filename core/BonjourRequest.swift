@@ -9,7 +9,18 @@ import Foundation
 import CocoaAsyncSocket
 
 public struct BonjourRequest {
-    public let method: String
+    public enum Method: String {
+        public typealias RawValue = String
+        case Get = "GET"
+        case Post = "POST"
+        case Head = "HEAD"
+        case Put = "PUT"
+        case Delete = "DELETE"
+        case Options = "OPTIONS"
+        case Trace = "TRACE"
+        case Patch = "PATCH"
+    }
+    public let method: Method
     public let path: String
     public let proto: String
     public var headers: [String:String]
@@ -18,13 +29,13 @@ public struct BonjourRequest {
         let headersSection = headers.map {
             "\($0):\($1)"
         }.joined(separator: "\r\n")
-        return Data("\(method) \(path) \(proto)\r\n\(headersSection)\r\n\r\n".utf8)
+        return Data("\(method.rawValue) \(path) \(proto)\r\n\(headersSection)\r\n\r\n".utf8)
     }
     var context: String {
         headers["X-Context"] ?? "__unspecified__"
     }
 
-    public init(path: String, method: String = "GET") {
+    public init(path: String, method: Method = .Get) {
         self.path = path
         self.method = method
         self.proto = "HTTP/1.1"
@@ -64,12 +75,13 @@ public struct BonjourRequest {
     init(result: BonjourParser.Result) {
         //let (firstLine, headers, body) = try BonjourParser.perse(data: data)
         let parts = result.firstLine.components(separatedBy: " ")
-        if parts.count == 3 {
-            (method, path, proto) = (parts[0], parts[1], parts[2])
+        if parts.count == 3, let method = Method(rawValue: parts[0]) {
+            self.method = method
+            (path, proto) = (parts[1], parts[2])
         } else {
             // Treat invalid header as the access to the root
             print("### ERROR Invalid Fist Line", result.firstLine)
-            (method, path, proto) = ("GET", "/", "HTTP/1.1")
+            (method, path, proto) = (.Get, "/", "HTTP/1.1")
         }
         self.body = result.body
         self.headers = result.headers
@@ -79,8 +91,8 @@ public struct BonjourRequest {
 extension BonjourRequest : CustomStringConvertible {
     public var description: String {
         guard let body = body else {
-            return "\(method) \(path) \(proto)"
+            return "\(method.rawValue) \(path) \(proto)"
         }
-        return "\(method) \(path) \(proto), Body:\(body.count)"
+        return "\(method.rawValue) \(path) \(proto), Body:\(body.count)"
     }
 }

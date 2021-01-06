@@ -40,7 +40,7 @@ struct ServiceView: View {
                 Text("Get")
             })
             Button(action: {
-                var req = BonjourRequest(path: "/bar", method: "POST")
+                var req = BonjourRequest(path: "/bar", method: .Post)
                 req.setBody(string: "Hello World")
                 connection.send(req: req)
             }, label: {
@@ -132,7 +132,7 @@ struct ServiceView: View {
         guard let data = inputImage?.jpegData(compressionQuality: 0.7) else {
             return
         }
-        var req = BonjourRequest(path: "/image", method: "POST")
+        var req = BonjourRequest(path: "/image", method: .Post)
         req.setBody(data: data, type: "image/jpeg")
         connection.send(req: req) { (res, json) in
             print("image posted: \(res.statusText)")

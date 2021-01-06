@@ -121,7 +121,7 @@ extension BonjourService : GCDAsyncSocketDelegate {
             print("REQ:", req)
             if let delegate = self.delegate {
                 let components = req.path.components(separatedBy: "/")
-                if components.count == 3, components[0] == "" && components[1] == "api" {
+                if components.count == 3, components[0] == "", components[1] == "api", req.method == .Post {
                     let json = req.jsonBody ?? [:]
                     delegate.service(self, onCall: components[2], params: json, socket: sock, context: req.context)
                 } else {

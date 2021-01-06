@@ -61,7 +61,7 @@ public class BonjourConnection: NSObject, ObservableObject {
     }
     
     public func call(_ name: String, params: [String:Any], callback: @escaping CompletionHandler) {
-        var req = BonjourRequest(path: "/api/\(name)")
+        var req = BonjourRequest(path: "/api/\(name)", method: .Post)
         req.setBody(json: params)
         send(req: req, callback: callback)
     }
