@@ -67,3 +67,13 @@ class SampleHTTPServer : NSObject, BonjourServiceDelegate {
     }
 }
 ```
+
+## CocoaPods
+
+I generates two cocoa pods from this repository. 
+
+- https://cocoapods.org/pods/bonjour-http (client & server)
+- https://cocoapods.org/pods/bonjour-http-server (server only)
+
+The server-only version is for MacOS applications targeting 10.14. 
+The client-side of code uses *ObservableObject* protocol and *@Published* prefix to support SwiftUI, which is available on MacOS 10.15 and later. 
