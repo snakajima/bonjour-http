@@ -38,20 +38,24 @@ Bonjour is a great mechanism to establish connections among devices on a local n
 
 **BonjourConnection** allows an application to establish a connection between a Bonjour service selected by the user. The application calls its send(req:) method to send an HTTP request to the connected sever. In order to receive responces from the server, the application needs to create an object, which implements **BonjourConnectionDelegate** protocol. 
 
-**BonjourRequest** represents an HTTP request, which an application creates and send using an established BonjourConnection.
+**BonjourRequest** represents an HTTP request, which an application creates and sends using an established BonjourConnection.
 
-**BonjourResponce** represents an HTTP responce from the Bonjour server. 
+**BonjourResponse** represents an HTTP response returned from the Bonjour server. 
 
 ## Classes for Server
 
 **BonjourService** allows an application to publish a specific type of Bonjour service. An application needs to define a class respresenting HTTP server, which implements **BonjourServiceDelegate** protocol. 
+
+**BonjourRequest** represents an HTTP request sent from the client application. The server receives it via service:onRequest:socket:context method of **BonjourServiceDelegate** protocol.
+
+**BonjourResponse** represents an HTTP response, which the server application creates as the response to an HTTP request from the client application. 
 
 Here is an example, which returns "Hello World!" page at the root ("/").
 
 ```
 class SampleHTTPServer : NSObject, BonjourServiceDelegate {
     func service(_ service: BonjourService, onRequest req: BonjourRequest, socket: GCDAsyncSocket, context: String) {
-        var res = BonjourResponce(context: context)
+        var res = BonjourResponse(context: context)
         switch(req.path) {
         case "/":
             res.setBody(string: "<html><body>Hello World!</body></html>")
