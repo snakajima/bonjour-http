@@ -7,7 +7,7 @@ It also has an http-call wrapper, which allows the client to call a specific fun
 ```
 // Client-side
 connection.call("greeting", params: ["message": "How are you?"]) { (res, json) in
-    if let res.isSuccess {
+    if res.isSuccess {
         // process the response
         ...
     }
