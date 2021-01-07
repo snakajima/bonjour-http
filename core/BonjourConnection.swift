@@ -10,7 +10,7 @@ import CocoaAsyncSocket
 
 public protocol BonjourConnectionDelegate : NSObjectProtocol {
     // Only recponces not processed by callback (of send or call methos) will come here
-    func on(responce: BonjourResponse, connection: BonjourConnection)
+    func connection(connection: BonjourConnection, responce res: BonjourResponse, context: String?)
 }
 
 public class BonjourConnection: NSObject, ObservableObject {
@@ -108,12 +108,13 @@ extension BonjourConnection : GCDAsyncSocketDelegate {
         do {
             let result = try BonjourParser.parse(data)
             let res = BonjourResponse(result: result)
-            if let context = res.headers["X-Context"],
+            let context = res.headers["X-Context"]
+            if let context = context,
                let callback = callbacks[context] {
                     callback(res, res.jsonBody)
                     callbacks.removeValue(forKey: context)
             } else {
-                delegate?.on(responce: res, connection: self)
+                delegate?.connection(connection: self, responce: res, context: context)
             }
             if let extraData = result.extraData {
                 print("  extra data", extraData.count)

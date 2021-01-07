@@ -8,7 +8,12 @@
 import Foundation
 
 class SampleHTTPClient: NSObject, BonjourConnectionDelegate {
-    func on(responce: BonjourResponse, connection: BonjourConnection) {
-        print("res", responce)
+    func connection(connection: BonjourConnection, responce res: BonjourResponse, context: String?) {
+        if let context = context, context == "push" {
+            print("pushed", res)
+
+        } else {
+            print("unhandled response", res)
+        }
     }
 }
