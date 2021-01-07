@@ -36,6 +36,15 @@ struct ContentView: View {
                     Text("Start")
                 })
             }
+            Button(action: {
+                if let socket = myServer.clients.first {
+                    var res = BonjourResponse(context: "push")
+                    res.setBody(json: ["message":"I am pushing you"])
+                    service.send(responce: res, to: socket)
+                }
+            }, label: {
+                Text("Push")
+            })
             if let image = myServer.image {
                 Image(nsImage: NSImage(cgImage: image, size: CGSize(width: image.width, height: image.height)))
                     .resizable()
