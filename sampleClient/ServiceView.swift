@@ -32,9 +32,11 @@ struct ServiceView: View {
                     }
             }
             Button(action: {
-                let req = BonjourRequest(path: "/foo")
-                connection.send(req: req) { (res, json) in
-                    print("callback", res.statusText)
+                for i in 0..<8 {
+                    let req = BonjourRequest(path: "/foo")
+                    connection.send(req: req) { (res, json) in
+                        print("callback \(i)", res.statusText)
+                    }
                 }
             }, label: {
                 Text("Get")

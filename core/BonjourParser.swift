@@ -76,8 +76,8 @@ class BonjourParser {
             } else {
                 result.body = bodyAll
             }
-        } else if let _ = body {
-            throw ParserError.missingContentLength
+        } else if let extraData = body {
+            result.extraData = extraData
         }
         return result
     }
