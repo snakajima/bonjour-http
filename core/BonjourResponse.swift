@@ -28,6 +28,12 @@ public struct BonjourResponse {
         self.headers = result.headers
     }
 
+    public mutating func setBody(data: Data, type: String) {
+        body = data
+        headers["Content-Length"] = String(data.count)
+        headers["Content-Type"] = type
+    }
+
     public mutating func setBody(string: String, type: String="text/html") {
         body = Data(string.utf8)
         headers["Content-Length"] = String(body!.count)
