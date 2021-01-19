@@ -14,7 +14,7 @@ Pod::Spec.new do |s|
  
   s.ios.deployment_target = '13.0'
   s.osx.deployment_target = '10.14'
-  s.source_files = 'core/BonjourService.swift', 'core/BonjourRequest.swift', 'core/BonjourResponse.swift', 'core/BonjourParser.swift'
+  s.source_files = 'core/BonjourService.swift', 'core/BonjourRequest.swift', 'core/BonjourResponse.swift', 'core/BonjourParser.swift', 'core/BonjourLogger.swift'
   s.swift_versions = '5.0'
   s.dependency 'CocoaAsyncSocket'
 end
