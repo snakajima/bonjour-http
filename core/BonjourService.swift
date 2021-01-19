@@ -53,7 +53,7 @@ public class BonjourService : NSObject {
             service.publish()
             self.service = service
         } catch {
-            print("### Error socket.accept failed", error)
+            BonjourLogError("### Error socket.accept failed \(error)")
         }
     }
     
@@ -88,7 +88,7 @@ public class BonjourService : NSObject {
 
 extension BonjourService : GCDAsyncSocketDelegate {
     public func socket(_ sock: GCDAsyncSocket, didAcceptNewSocket newSocket: GCDAsyncSocket) {
-        print("socket:didAcceptNewSocket", newSocket)
+        BonjourLog("socket:didAcceptNewSocket \(newSocket)")
         self.clients.append(newSocket)
         newSocket.userData = UUID()
         newSocket.delegate = self
@@ -118,7 +118,7 @@ extension BonjourService : GCDAsyncSocketDelegate {
             let result = try BonjourParser.parse(data)
             let req = BonjourRequest(result: result)
 
-            print("REQ:", req)
+            BonjourLog("REQ:\(req)")
             if let delegate = self.delegate {
                 let components = req.path.components(separatedBy: "/")
                 if components.count == 3, components[0] == "", components[1] == "api", req.method == .Post {
@@ -129,11 +129,11 @@ extension BonjourService : GCDAsyncSocketDelegate {
                 }
             }
             if let extraData = result.extraData {
-                print("  extra data", extraData.count)
+                BonjourLog("  extra data \(extraData.count)")
                 self.innerSocket(sock, uuidSock: uuidSock, data: extraData)
             }
         } catch {
-            print("  buffering", data.count)
+            BonjourLog("  buffering \(data.count)")
             buffers[uuidSock] = data
         }
     }
@@ -142,11 +142,11 @@ extension BonjourService : GCDAsyncSocketDelegate {
     }
     
     public func socket(_ sock: GCDAsyncSocket, didConnectToHost host: String, port: UInt16) {
-        print("socket:didConnectToHost")
+        BonjourLog("socket:didConnectToHost")
     }
     
     public func socketDidDisconnect(_ sock: GCDAsyncSocket, withError err: Error?) {
-        print("socketDidDisconnect")
+        BonjourLog("socketDidDisconnect")
         if let uuid = sock.uuid { // dealing with the its own socket
             buffers.removeValue(forKey: uuid)
         }
@@ -156,10 +156,10 @@ extension BonjourService : GCDAsyncSocketDelegate {
 
 extension BonjourService : NetServiceDelegate {
     public func netServiceDidPublish(_ sender: NetService) {
-        print("netServiceDidPublish")
+        BonjourLog("netServiceDidPublish")
     }
     
     public func netService(_ sender: NetService, didNotPublish errorDict: [String : NSNumber]) {
-        print("netService:didNotPublish", errorDict)
+        BonjourLogError("netService:didNotPublish \(errorDict)")
     }
 }

@@ -52,6 +52,7 @@ struct ContentView: View {
                     .frame(height: 200)
             }
         }.onAppear() {
+            BonjourLogger.shared.mode = .verbose
             service.delegate = myServer
             service.start()
         }
