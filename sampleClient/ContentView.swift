@@ -22,6 +22,7 @@ struct ContentView: View {
             }
         }
         .onAppear() {
+            BonjourLogger.shared.mode = .verbose
             browser.start()
         }
     }

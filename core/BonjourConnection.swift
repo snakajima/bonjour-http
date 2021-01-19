@@ -74,20 +74,20 @@ extension BonjourConnection : NetServiceDelegate {
     }
     
     public func netService(_ sender: NetService, didNotPublish errorDict: [String : NSNumber]) {
-        print("netService:errorDict", errorDict)
+        BonjourLogError("netService:errorDict \(errorDict)")
     }
     
 }
 
 extension BonjourConnection : GCDAsyncSocketDelegate {
     public func socket(_ sock: GCDAsyncSocket, didConnectToHost host: String, port: UInt16) {
-        print("socket:didConnectToHost")
+        BonjourLog("socket:didConnectToHost")
         isConnected = true
         sock.readData(withTimeout: -1, tag: 3)
     }
     
     public func socketDidDisconnect(_ sock: GCDAsyncSocket, withError err: Error?) {
-        print("socket:didDisconnect")
+        BonjourLog("socket:didDisconnect")
         socket = nil
         isConnected = false
     }
@@ -117,11 +117,11 @@ extension BonjourConnection : GCDAsyncSocketDelegate {
                 delegate?.connection(connection: self, responce: res, context: context)
             }
             if let extraData = result.extraData {
-                print("  extra data", extraData.count)
+                BonjourLog("  extra data \(extraData.count)")
                 self.innerSocket(sock, data: extraData)
             }
         } catch {
-            print("  buffering", data.count)
+            BonjourLog("  buffering \(data.count)")
             buffer = data
         }
     }

@@ -35,7 +35,7 @@ struct ServiceView: View {
                 for i in 0..<8 {
                     let req = BonjourRequest(path: "/foo")
                     connection.send(req: req) { (res, json) in
-                        print("callback \(i)", res.statusText)
+                        BonjourLog("callback \(i) \(res.statusText)")
                     }
                 }
             }, label: {
@@ -112,7 +112,7 @@ struct ServiceView: View {
                 Text("Bad HTTP Call")
             })
             Button(action: {
-                print("photo")
+                BonjourLog("photo")
                 self.showingImagePicker = true
             }, label: {
                 Text("Image")
