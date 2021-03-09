@@ -78,7 +78,7 @@ extension BonjourConnection : NetServiceDelegate {
     }
     
     public func netService(_ sender: NetService, didNotPublish errorDict: [String : NSNumber]) {
-        BonjourLogError("netService:errorDict \(errorDict)")
+        BonjourLogError("BonjourConnection:netService:errorDict \(errorDict)")
     }
     
 }
@@ -121,11 +121,11 @@ extension BonjourConnection : GCDAsyncSocketDelegate {
                 delegate?.connection(connection: self, responce: res, context: context)
             }
             if let extraData = result.extraData {
-                BonjourLog("  extra data \(extraData.count)")
+                BonjourLogExtra("BonjourConnection:innerSocket extra data \(extraData.count)")
                 self.innerSocket(sock, data: extraData)
             }
         } catch {
-            BonjourLog("  buffering \(data.count)")
+            BonjourLogExtra("BonjourConnection:innerSocket buffering \(data.count)")
             buffer = data
         }
     }

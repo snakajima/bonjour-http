@@ -79,9 +79,9 @@ public class BonjourService : NSObject {
     }
     
     public func respond(to socket: GCDAsyncSocket, context: String, result: [String:Any], statusText: String? = nil) {
-        BonjourLog("BonjourService:respond \(context)")
         var res = BonjourResponse(context: context)
         res.setBody(json: result)
+        BonjourLog("BonjourService:respond \(res) \(context)")
         if let statusText = statusText {
             res.statusText = statusText
         }
@@ -121,7 +121,7 @@ extension BonjourService : GCDAsyncSocketDelegate {
             let result = try BonjourParser.parse(data)
             let req = BonjourRequest(result: result)
 
-            BonjourLog("BonjourService REQ:\(req)")
+            BonjourLog("BonjourService:innerSocket \(req)")
             if let delegate = self.delegate {
                 let components = req.path.components(separatedBy: "/")
                 if components.count == 3, components[0] == "", components[1] == "api", req.method == .Post {
@@ -132,11 +132,11 @@ extension BonjourService : GCDAsyncSocketDelegate {
                 }
             }
             if let extraData = result.extraData {
-                BonjourLog("BonjourService  extra data \(extraData.count)")
+                BonjourLogExtra("BonjourService  extra data \(extraData.count)")
                 self.innerSocket(sock, uuidSock: uuidSock, data: extraData)
             }
         } catch {
-            BonjourLog("BonjourService  buffering \(data.count)")
+            BonjourLogExtra("BonjourService  buffering \(data.count)")
             buffers[uuidSock] = data
         }
     }

@@ -47,7 +47,7 @@ public struct BonjourResponse {
             headers["Content-Length"] = String(body!.count)
             headers["Content-Type"] = "application/json"
         } else {
-            print("BonjourRequest: setBodyJson failed")
+            BonjourLogError("BonjourRequest: setBodyJson failed")
         }
     }
 
