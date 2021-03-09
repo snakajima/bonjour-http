@@ -19,17 +19,17 @@ public func BonjourLog(_ str: String) {
     BonjourLogger.shared.log(str, level: .debug)
 }
 
-class BonjourLogger {
+public class BonjourLogger {
     static let shared = BonjourLogger()
-    var mode: Mode = .none
+    public var mode: Mode = .none
     
-    enum Mode {
+    public enum Mode {
         case none
         case quiet
         case verbose
     }
     
-    enum Level {
+    public enum Level {
         case debug
         case warning
         case error

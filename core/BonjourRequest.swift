@@ -61,7 +61,7 @@ public struct BonjourRequest {
             headers["Content-Length"] = String(body!.count)
             headers["Content-Type"] = "application/json"
         } else {
-            print("BonjourRequest: setBodyJson failed")
+            BonjourLogError("BonjourRequest: setBodyJson failed")
         }
     }
     
@@ -80,7 +80,7 @@ public struct BonjourRequest {
             (path, proto) = (parts[1], parts[2])
         } else {
             // Treat invalid header as the access to the root
-            print("### ERROR Invalid Fist Line", result.firstLine)
+            BonjourLogError("Invalid Fist Line \(result.firstLine)")
             (method, path, proto) = (.Get, "/", "HTTP/1.1")
         }
         self.body = result.body

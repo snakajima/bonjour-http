@@ -29,20 +29,20 @@ public class BonjourBrowser: NSObject, ObservableObject {
 
 extension BonjourBrowser : NetServiceBrowserDelegate {
     public func netServiceBrowser(_ browser: NetServiceBrowser, didFind service: NetService, moreComing: Bool) {
-        BonjourLog("netServiceBrowser:didFind \(service)")
+        BonjourLog("BonjourBrowser:netServiceBrowser:didFind \(service)")
         services.append(service)
     }
     
     public func netServiceBrowser(_ browser: NetServiceBrowser, didRemove service: NetService, moreComing: Bool) {
         services = services.filter { $0 != service }
-        BonjourLog("netServiceBroser:didRemove \(service), \(services.count)")
+        BonjourLog("BonjourBrowser:netServiceBroser:didRemove \(service), \(services.count)")
     }
     
     public func netServiceBrowserDidStopSearch(_ browser: NetServiceBrowser) {
-        BonjourLog("netServiceBrowserDidStopSearch")
+        BonjourLog("BonjourBrowser:netServiceBrowserDidStopSearch")
     }
     
     public func netServiceBrowser(_ browser: NetServiceBrowser, didNotSearch errorDict: [String : NSNumber]) {
-        BonjourLogError("netServiceBrowser:didNotSearch \(errorDict)")
+        BonjourLogError("BonjourBrowser:netServiceBrowser:didNotSearch \(errorDict)")
     }
 }

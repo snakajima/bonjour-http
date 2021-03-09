@@ -43,12 +43,14 @@ public class BonjourConnection: NSObject, ObservableObject {
     }
     
     public func disconnect() {
+        BonjourLog("BonjourConnection:disconnect")
         if let socket = self.socket {
             socket.disconnect()
         }
     }
     
     public func send(req reqInput: BonjourRequest, callback: CompletionHandler? = nil) {
+        BonjourLog("BonjourConnection:send \(reqInput)")
         var req = reqInput
         if let callback = callback {
             let context = UUID().uuidString
@@ -62,6 +64,7 @@ public class BonjourConnection: NSObject, ObservableObject {
     }
     
     public func call(_ name: String, params: [String:Any], callback: CompletionHandler? = nil) {
+        BonjourLog("BonjourConnection:call \(name)")
         var req = BonjourRequest(path: "/api/\(name)", method: .Post)
         req.setBody(json: params)
         send(req: req, callback: callback)
@@ -70,6 +73,7 @@ public class BonjourConnection: NSObject, ObservableObject {
 
 extension BonjourConnection : NetServiceDelegate {
     public func netServiceDidResolveAddress(_ sender: NetService) {
+        BonjourLog("BonjourConnection:netServiceDidResolveAddress")
         connect()
     }
     
@@ -81,13 +85,13 @@ extension BonjourConnection : NetServiceDelegate {
 
 extension BonjourConnection : GCDAsyncSocketDelegate {
     public func socket(_ sock: GCDAsyncSocket, didConnectToHost host: String, port: UInt16) {
-        BonjourLog("socket:didConnectToHost")
+        BonjourLog("BonjourConnection:socket:didConnectToHost")
         isConnected = true
         sock.readData(withTimeout: -1, tag: 3)
     }
     
     public func socketDidDisconnect(_ sock: GCDAsyncSocket, withError err: Error?) {
-        BonjourLog("socket:didDisconnect")
+        BonjourLog("BonjourConnection:socket:didDisconnect")
         socket = nil
         isConnected = false
     }
