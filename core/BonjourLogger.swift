@@ -20,7 +20,7 @@ public func BonjourLog(_ str: String) {
 }
 
 public class BonjourLogger {
-    static let shared = BonjourLogger()
+    public static let shared = BonjourLogger()
     public var mode: Mode = .none
     
     public enum Mode {

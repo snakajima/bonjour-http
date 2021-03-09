@@ -121,7 +121,7 @@ extension BonjourService : GCDAsyncSocketDelegate {
             let result = try BonjourParser.parse(data)
             let req = BonjourRequest(result: result)
 
-            BonjourLog("REQ:\(req)")
+            BonjourLog("BonjourService REQ:\(req)")
             if let delegate = self.delegate {
                 let components = req.path.components(separatedBy: "/")
                 if components.count == 3, components[0] == "", components[1] == "api", req.method == .Post {
@@ -132,11 +132,11 @@ extension BonjourService : GCDAsyncSocketDelegate {
                 }
             }
             if let extraData = result.extraData {
-                BonjourLog("  extra data \(extraData.count)")
+                BonjourLog("BonjourService  extra data \(extraData.count)")
                 self.innerSocket(sock, uuidSock: uuidSock, data: extraData)
             }
         } catch {
-            BonjourLog("  buffering \(data.count)")
+            BonjourLog("BonjourService  buffering \(data.count)")
             buffers[uuidSock] = data
         }
     }
