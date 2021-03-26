@@ -37,8 +37,13 @@ public class BonjourConnection: NSObject, ObservableObject {
 
         let socket = GCDAsyncSocket(delegate: self, delegateQueue: .main)
         service.addresses?.forEach({ address in
-            if self.socket == nil, let _ = try? socket.connect(toAddress: address) {
-                self.socket = socket
+            if self.socket == nil {
+                do {
+                    let _ = try socket.connect(toAddress: address)
+                    self.socket = socket
+                } catch {
+                    BonjourLogWarning("BonjourConnection:connect failed \(error.localizedDescription)")
+                }
             }
         })
     }
