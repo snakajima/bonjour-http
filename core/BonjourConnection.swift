@@ -29,6 +29,7 @@ public class BonjourConnection: NSObject, ObservableObject {
     }
     
     public func connect() {
+        BonjourLogExtra("BonjourConnection:connect \(service.addresses?.count ?? 0)")
         if service.addresses?.count ?? 0 == 0 {
             service.resolve(withTimeout: 30.0)
             return
